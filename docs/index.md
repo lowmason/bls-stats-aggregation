@@ -4,7 +4,7 @@ Download QCEW (Quarterly Census of Employment and Wages) data from BLS and map i
 
 ## Quick links
 
-- [User guide](user-guide.md) — install, CSV API and bulk pipelines, hierarchy overview
+- [User guide](user-guide.md) — install, bulk pipeline, hierarchy overview
 - [API reference](api/package.md) — auto-generated from Google-style docstrings
 
 ## Local preview
