@@ -1,3 +1,3 @@
 # Package overview
 
-::: bls_stats
+::: qcew_stats

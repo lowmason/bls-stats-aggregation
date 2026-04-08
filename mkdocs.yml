@@ -1,6 +1,6 @@
-site_name: bls-stats
+site_name: qcew-stats
 site_description: Download QCEW data from BLS and map to CES industry groups
-repo_url: https://github.com/lowmason/bls-stats
+repo_url: https://github.com/lowmason/qcew-stats
 
 theme:
   name: material
@@ -53,8 +53,8 @@ nav:
   - User guide: user-guide.md
   - API reference:
       - Package: api/package.md
-      - bls_stats.download: api/download.md
-      - bls_stats.geography: api/geography.md
-      - bls_stats.http_client: api/http_client.md
-      - bls_stats.industry: api/industry.md
-      - bls_stats.mapping: api/mapping.md
+      - qcew_stats.download: api/download.md
+      - qcew_stats.geography: api/geography.md
+      - qcew_stats.http_client: api/http_client.md
+      - qcew_stats.industry: api/industry.md
+      - qcew_stats.mapping: api/mapping.md

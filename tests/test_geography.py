@@ -1,6 +1,6 @@
-"""Tests for bls_stats.geography constants."""
+"""Tests for qcew_stats.geography constants."""
 
-from bls_stats.geography import STATE_FIPS_TO_NAME, STATE_NAME_TO_FIPS, STATES
+from qcew_stats.geography import STATE_FIPS_TO_NAME, STATE_NAME_TO_FIPS, STATES
 
 
 class TestStates:

@@ -1,4 +1,4 @@
-"""Tests for bls_stats.http_client — retry and client creation."""
+"""Tests for qcew_stats.http_client — retry and client creation."""
 
 from __future__ import annotations
 
@@ -8,7 +8,7 @@ from unittest.mock import MagicMock, patch
 import httpx
 import pytest
 
-from bls_stats.http_client import (
+from qcew_stats.http_client import (
     MAX_RETRIES,
     create_client,
     get_with_retry,
@@ -38,7 +38,7 @@ class TestGetWithRetry:
         assert result == mock_response
         assert mock_client.get.call_count == 1
 
-    @patch('bls_stats.http_client.time.sleep')
+    @patch('qcew_stats.http_client.time.sleep')
     def test_retries_on_429(self, mock_sleep):
         mock_client = MagicMock()
         rate_limited = MagicMock()
@@ -52,7 +52,7 @@ class TestGetWithRetry:
         assert mock_client.get.call_count == 2
         mock_sleep.assert_called_once()
 
-    @patch('bls_stats.http_client.time.sleep')
+    @patch('qcew_stats.http_client.time.sleep')
     def test_retries_on_500(self, mock_sleep):
         mock_client = MagicMock()
         error = MagicMock()
@@ -64,7 +64,7 @@ class TestGetWithRetry:
         result = get_with_retry(mock_client, 'https://example.com/test')
         assert result == success
 
-    @patch('bls_stats.http_client.time.sleep')
+    @patch('qcew_stats.http_client.time.sleep')
     def test_exponential_backoff(self, mock_sleep):
         mock_client = MagicMock()
         error = MagicMock()

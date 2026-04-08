@@ -1,10 +1,10 @@
-"""Tests for bls_stats.download — bulk CSV filtering."""
+"""Tests for qcew_stats.download — bulk CSV filtering."""
 
 from __future__ import annotations
 
 import polars as pl
 
-from bls_stats.download import _filter_bulk_csv
+from qcew_stats.download import _filter_bulk_csv
 
 
 class TestFilterBulkCsv:

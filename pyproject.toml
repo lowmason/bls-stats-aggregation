@@ -3,7 +3,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "bls-stats"
+name = "qcew-stats"
 version = "0.1.0"
 description = "Download QCEW data from BLS and map to CES industry groups"
 requires-python = ">=3.11"
@@ -24,4 +24,4 @@ docs = [
 ]
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/bls_stats"]
+packages = ["src/qcew_stats"]

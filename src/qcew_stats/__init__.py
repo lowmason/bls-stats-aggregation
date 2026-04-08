@@ -1,6 +1,6 @@
 """Download QCEW bulk data from BLS and map to CES industry groups.
 
-    >>> from bls_stats import download_qcew_bulk, map_bulk_to_ces
+    >>> from qcew_stats import download_qcew_bulk, map_bulk_to_ces
     >>> path = download_qcew_bulk(start_year=2020, end_year=2024)
     >>> ces = map_bulk_to_ces(path)
 """

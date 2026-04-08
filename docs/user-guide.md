@@ -15,7 +15,7 @@ Requires Python 3.11+ with `polars` and `httpx`.
 Downloads per-quarter, per-industry CSVs from the BLS QCEW CSV API at `data.bls.gov/cew/data/api/`. Good for recent data, supports filtering by geography and ownership.
 
 ```python
-from bls_stats import fetch_qcew_with_geography, map_qcew_to_ces
+from qcew_stats import fetch_qcew_with_geography, map_qcew_to_ces
 
 # Download 2023-2024, private + government, national + all states
 raw = fetch_qcew_with_geography(
@@ -35,7 +35,7 @@ print(ces)
 Downloads yearly ~280 MB singlefile ZIPs from `data.bls.gov/cew/data/files/`, filters to national + state rows, and saves a compact parquet. Includes 3-digit manufacturing split into durable/nondurable.
 
 ```python
-from bls_stats import download_qcew_bulk, map_bulk_to_ces
+from qcew_stats import download_qcew_bulk, map_bulk_to_ces
 
 # Download and filter (writes parquet)
 path = download_qcew_bulk(start_year=2020, end_year=2024)
@@ -69,7 +69,7 @@ The CES industry structure has three levels:
 ### Key constants
 
 ```python
-from bls_stats import (
+from qcew_stats import (
     INDUSTRY_HIERARCHY,       # Polars LazyFrame: sector → supersector → domain
     INDUSTRY_MAP,             # List[IndustryEntry]: all 35 CES industry codes
     GOVT_OWNERSHIP_TO_SECTOR, # {'1': '91', '2': '92', '3': '93'}
