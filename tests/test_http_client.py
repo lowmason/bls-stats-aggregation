@@ -1,81 +1,18 @@
-"""Tests for bls_stats.http_client — caching, retry, and client creation."""
+"""Tests for bls_stats.http_client — retry and client creation."""
 
 from __future__ import annotations
 
 import os
-import time
 from unittest.mock import MagicMock, patch
 
 import httpx
 import pytest
 
 from bls_stats.http_client import (
-    BLSHttpClient,
     MAX_RETRIES,
     create_client,
     get_with_retry,
 )
-
-
-class TestBLSHttpClientCache:
-    def test_cache_path_sanitizes(self):
-        client = BLSHttpClient(cache_dir='/tmp/test_bls_cache')
-        path = client._cache_path('qcew_2024_1_industry_10.csv')
-        assert 'qcew_2024_1_industry_10.csv' in path
-        client.close()
-
-    def test_cache_path_replaces_slashes(self):
-        client = BLSHttpClient(cache_dir='/tmp/test_bls_cache')
-        path = client._cache_path('a/b\\c.csv')
-        assert '/' not in os.path.basename(path)
-        assert '\\' not in os.path.basename(path)
-        client.close()
-
-    def test_cache_valid_fresh_file(self, tmp_path):
-        cache_file = tmp_path / 'test.csv'
-        cache_file.write_text('data')
-        client = BLSHttpClient(cache_dir=str(tmp_path), cache_ttl=3600)
-        assert client._is_cache_valid(str(cache_file)) is True
-        client.close()
-
-    def test_cache_invalid_missing_file(self, tmp_path):
-        client = BLSHttpClient(cache_dir=str(tmp_path), cache_ttl=3600)
-        assert client._is_cache_valid(str(tmp_path / 'missing.csv')) is False
-        client.close()
-
-    def test_cache_invalid_expired(self, tmp_path):
-        cache_file = tmp_path / 'old.csv'
-        cache_file.write_text('data')
-        # Set modification time to the past
-        old_time = time.time() - 7200
-        os.utime(cache_file, (old_time, old_time))
-        client = BLSHttpClient(cache_dir=str(tmp_path), cache_ttl=3600)
-        assert client._is_cache_valid(str(cache_file)) is False
-        client.close()
-
-    def test_context_manager(self):
-        with BLSHttpClient() as client:
-            assert client.session is not None
-
-
-class TestBLSHttpClientGetQcewCsv:
-    def test_invalid_slice_type(self):
-        client = BLSHttpClient()
-        with pytest.raises(ValueError, match='slice_type must be'):
-            client.get_qcew_csv(2024, 1, '10', slice_type='invalid')
-        client.close()
-
-    def test_reads_from_cache(self, tmp_path):
-        cache_dir = str(tmp_path)
-        # Pre-populate cache
-        cache_file = tmp_path / 'qcew_2024_1_industry_10.csv'
-        cache_file.write_text('area_fips,own_code\nUS000,5\n')
-
-        client = BLSHttpClient(cache_dir=cache_dir, cache_ttl=3600)
-        df = client.get_qcew_csv(2024, 1, '10')
-        assert len(df) == 1
-        assert df['area_fips'][0] == 'US000'
-        client.close()
 
 
 class TestCreateClient:

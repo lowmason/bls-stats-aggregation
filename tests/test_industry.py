@@ -15,7 +15,6 @@ from bls_stats.industry import (
     get_sector_codes,
     get_supersector_codes,
     get_supersector_components,
-    qcew_to_sector,
 )
 
 
@@ -145,30 +144,6 @@ class TestGetDomainSupersectors:
     def test_unknown_raises(self):
         with pytest.raises(ValueError, match='Unknown domain code'):
             get_domain_supersectors('99')
-
-
-class TestQcewToSector:
-    def test_returns_dict(self):
-        m = qcew_to_sector()
-        assert isinstance(m, dict)
-
-    def test_qcew_codes_mapped(self):
-        m = qcew_to_sector()
-        assert m['1012'] == '21'  # Mining
-        assert m['1022'] == '31'  # Manufacturing
-        assert m['1024'] == '44'  # Retail
-        assert m['102A'] == '55'  # Management of Companies
-
-    def test_naics_identity_mapping(self):
-        m = qcew_to_sector()
-        # NAICS sector codes map to themselves
-        for code in ['21', '23', '31', '42', '51', '72']:
-            assert m[code] == code
-
-    def test_no_government_codes(self):
-        m = qcew_to_sector()
-        for code in ['1', '2', '3']:
-            assert code not in m
 
 
 class TestGovtOwnershipToSector:

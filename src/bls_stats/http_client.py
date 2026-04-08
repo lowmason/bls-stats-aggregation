@@ -1,19 +1,17 @@
-"""HTTP client for BLS QCEW data access.
+"""HTTP client helpers for BLS bulk downloads.
 
-Provides ``BLSHttpClient`` for the QCEW CSV API at ``data.bls.gov/cew/data/api/``
-and ``get_with_retry`` for bulk file downloads with exponential back-off.
+Provides ``create_client`` for building an ``httpx.Client`` with
+BLS-friendly headers and ``get_with_retry`` for downloads with
+exponential back-off on transient errors.
 """
 
 from __future__ import annotations
 
-import io
 import logging
 import os
 import time
-from typing import Any
 
 import httpx
-import polars as pl
 
 logger = logging.getLogger(__name__)
 
@@ -30,102 +28,6 @@ _DEFAULT_HEADERS = {
 
 MAX_RETRIES = 8
 
-
-class BLSHttpClient:
-    """HTTP client for the BLS QCEW CSV API."""
-
-    QCEW_CSV_BASE = 'https://data.bls.gov/cew/data/api'
-
-    def __init__(
-        self,
-        cache_dir: str = '.cache/bls',
-        cache_ttl: int = 86_400,
-    ) -> None:
-        """Create a client with optional on-disk response cache.
-
-        Args:
-            cache_dir: Local directory for cached downloads. Defaults to
-                ``'.cache/bls'``.
-            cache_ttl: Cache time-to-live in seconds. Defaults to 86400 (24 hours).
-        """
-        self.cache_dir = cache_dir
-        self.cache_ttl = cache_ttl
-        self.session = httpx.Client(
-            headers={'User-Agent': _USER_AGENT}, timeout=60.0,
-        )
-
-    def get_qcew_csv(
-        self,
-        year: int,
-        quarter: int,
-        slice_code: str,
-        slice_type: str = 'industry',
-    ) -> pl.DataFrame:
-        """Download QCEW data from the CSV API.
-
-        Args:
-            year: Reference year.
-            quarter: Reference quarter (1-4).
-            slice_code: Industry code (e.g., ``'10'``, ``'1012'``), area code
-                (e.g., ``'US000'``), or size code.
-            slice_type: One of ``'industry'`` (default), ``'area'``, or ``'size'``.
-
-        Returns:
-            Raw QCEW DataFrame parsed from the CSV response.
-        """
-        if slice_type not in ('industry', 'area', 'size'):
-            raise ValueError(
-                f'slice_type must be industry, area, or size; got {slice_type!r}'
-            )
-
-        cache_key = f'qcew_{year}_{quarter}_{slice_type}_{slice_code}.csv'
-        cache_path = self._cache_path(cache_key)
-
-        qcew_text_cols = [
-            'area_fips', 'own_code', 'industry_code', 'agglvl_code',
-            'size_code', 'year', 'qtr', 'disclosure_code',
-            'lq_disclosure_code', 'oty_disclosure_code',
-        ]
-        schema_overrides = {c: pl.Utf8 for c in qcew_text_cols}
-
-        if self._is_cache_valid(cache_path):
-            return pl.read_csv(cache_path, schema_overrides=schema_overrides)
-
-        url = f'{self.QCEW_CSV_BASE}/{year}/{quarter}/{slice_type}/{slice_code}.csv'
-        response = self.session.get(url, timeout=60)
-        response.raise_for_status()
-
-        os.makedirs(self.cache_dir, exist_ok=True)
-        with open(cache_path, 'w', encoding='utf-8') as fh:
-            fh.write(response.text)
-
-        return pl.read_csv(
-            io.StringIO(response.text), schema_overrides=schema_overrides,
-        )
-
-    def _cache_path(self, filename: str) -> str:
-        safe_name = filename.replace('/', '_').replace('\\', '_')
-        return os.path.join(self.cache_dir, safe_name)
-
-    def _is_cache_valid(self, path: str) -> bool:
-        if not os.path.exists(path):
-            return False
-        age = time.time() - os.path.getmtime(path)
-        return age < self.cache_ttl
-
-    def close(self) -> None:
-        self.session.close()
-
-    def __enter__(self) -> BLSHttpClient:
-        return self
-
-    def __exit__(self, exc_type: Any, exc_val: Any, exc_tb: Any) -> None:
-        self.close()
-
-
-# ---------------------------------------------------------------------------
-# Standalone retry client for bulk downloads
-# ---------------------------------------------------------------------------
 
 def create_client(
     *,

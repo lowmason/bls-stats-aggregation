@@ -255,39 +255,3 @@ def _build_industry_map() -> list[IndustryEntry]:
 
 INDUSTRY_MAP: list[IndustryEntry] = _build_industry_map()
 """Complete industry mapping spanning domain, supersector, and sector levels."""
-
-
-# ---------------------------------------------------------------------------
-# QCEW code → NAICS sector mapping
-# ---------------------------------------------------------------------------
-
-def qcew_to_sector() -> dict[str, str]:
-    """Return a mapping from QCEW codes to NAICS-based sector codes.
-
-    Maps both QCEW CSV API codes (``'1012'``, ``'1023'``, ...) and raw
-    NAICS codes (``'21'``, ``'42'``, ...) to the NAICS-based sector codes
-    used in :data:`_HIERARCHY_ROWS`.
-    """
-    mapping: dict[str, str] = {
-        '1012': '21',  # Mining (NAICS 21)
-        '1013': '22',  # Utilities (NAICS 22)
-        '1021': '23',  # Construction (NAICS 23)
-        '1022': '31',  # Manufacturing (NAICS 31-33, simplified to '31')
-        '1023': '42',  # Wholesale Trade (NAICS 42)
-        '1024': '44',  # Retail Trade (NAICS 44-45, simplified to '44')
-        '1025': '48',  # Transportation (NAICS 48-49, simplified to '48')
-        '1026': '51',  # Information (NAICS 51)
-        '1027': '52',  # Finance and Insurance (NAICS 52)
-        '1028': '53',  # Real Estate (NAICS 53)
-        '1029': '54',  # Professional Services (NAICS 54)
-        '102A': '55',  # Management of Companies (NAICS 55)
-        '102B': '56',  # Administrative Services (NAICS 56)
-        '102C': '61',  # Educational Services (NAICS 61)
-        '102D': '62',  # Health Care (NAICS 62)
-        '102E': '71',  # Arts and Recreation (NAICS 71)
-        '102F': '72',  # Accommodation and Food (NAICS 72)
-        '102G': '81',  # Other Services (NAICS 81)
-    }
-    for sector_code, _, _, _, _, _ in _HIERARCHY_ROWS:
-        mapping[sector_code] = sector_code
-    return mapping

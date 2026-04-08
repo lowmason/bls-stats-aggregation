@@ -1,25 +1,18 @@
-"""Map QCEW data to CES industry groups.
+"""Map bulk QCEW data to CES industry groups.
 
-Two mapping pipelines:
+Operates on the parquet file produced by ``download_qcew_bulk``.  Handles
+four input streams: total (all-ownership), private 2-digit sectors,
+government by ownership, and 3-digit manufacturing (durable/nondurable
+split).  Aggregates through the full CES hierarchy:
 
-1. **API mapping** (``map_qcew_to_ces``): operates on raw output from
-   ``fetch_qcew`` / ``fetch_qcew_with_geography``. Extracts private-sector
-   employment by industry, government employment by ownership, then aggregates
-   through sectors → supersectors → domains.
+    sectors → supersectors → domains
 
-2. **Bulk mapping** (``map_bulk_to_ces``): operates on the parquet file
-   produced by ``download_qcew_bulk``. Handles four input streams:
-   total (all-ownership), private 2-digit sectors, government by ownership,
-   and 3-digit manufacturing (durable/nondurable split). Aggregates through
-   the full hierarchy.
-
-Both produce a long-format DataFrame with monthly employment levels keyed by
+Produces a long-format DataFrame with monthly employment levels keyed by
 ``(geographic_type, geographic_code, industry_type, industry_code, ref_date)``.
 """
 
 from __future__ import annotations
 
-from datetime import date
 from pathlib import Path
 
 import polars as pl
@@ -28,29 +21,23 @@ from .industry import (
     GOVT_OWNERSHIP_TO_SECTOR,
     NAICS3_TO_MFG_SECTOR,
     get_domain_supersectors,
+    get_sector_codes,
     get_supersector_components,
-    qcew_to_sector,
 )
 
 
 # ---------------------------------------------------------------------------
-# Shared constants
+# Mapping constants
 # ---------------------------------------------------------------------------
 
-_QCEW_SECTOR_MAP: dict[str, str] = {
-    **qcew_to_sector(),
-    '31-33': '31',
-    '44-45': '44',
-    '48-49': '48',
-}
-
 # NAICS 2-digit codes for private sectors, excluding manufacturing (handled
-# via the 3-digit durable/nondurable split in bulk processing).
+# via the 3-digit durable/nondurable split).  Bulk data uses range codes
+# '44-45' and '48-49' for retail and transportation.
 _NAICS_TO_SECTOR: dict[str, str] = {
-    k: v
-    for k, v in {**qcew_to_sector(), '44-45': '44', '48-49': '48'}.items()
-    if v != '31'
+    code: code for code in get_sector_codes() if code != '31'
 }
+_NAICS_TO_SECTOR['44-45'] = '44'
+_NAICS_TO_SECTOR['48-49'] = '48'
 
 # Sector → supersector lookup including government and nondurable mfg.
 _SECTOR_TO_SS: dict[str, str] = {}
@@ -68,248 +55,7 @@ _DOMAIN_SPECS: dict[str, list[str]] = {
 
 
 # ---------------------------------------------------------------------------
-# API mapping (from fetch_qcew / fetch_qcew_with_geography output)
-# ---------------------------------------------------------------------------
-
-def _map_industry_code(code: str) -> str | None:
-    """Map a QCEW industry code to a NAICS-based sector code."""
-    return _QCEW_SECTOR_MAP.get(code)
-
-
-def extract_sector_employment(
-    raw: pl.DataFrame,
-    geographic_type: str = 'national',
-    geographic_code: str = '00',
-) -> pl.DataFrame:
-    """Parse raw QCEW data into sector-level monthly employment rows.
-
-    Returns a DataFrame with columns: ``industry_code``, ``ref_date``,
-    ``employment``, ``qtr``, ``geographic_type``, ``geographic_code``.
-    """
-    required = [
-        'industry_code', 'year', 'qtr',
-        'month1_emplvl', 'month2_emplvl', 'month3_emplvl',
-    ]
-    for col in required:
-        if col not in raw.columns:
-            return pl.DataFrame()
-
-    rows: list[dict] = []
-    for row in raw.iter_rows(named=True):
-        ind_code = str(row['industry_code'])
-        sector = _map_industry_code(ind_code)
-        if sector is None:
-            continue
-
-        year = int(row['year'])
-        qtr = int(row['qtr'])
-        geo_t = str(row.get('geographic_type', geographic_type))
-        geo_c = str(row.get('geographic_code', geographic_code))
-
-        for m_idx, m_col in enumerate(
-            ['month1_emplvl', 'month2_emplvl', 'month3_emplvl'],
-            start=1,
-        ):
-            if row.get(m_col) is None:
-                continue
-            try:
-                emp = int(row[m_col])
-            except (ValueError, TypeError):
-                continue
-            if emp <= 0:
-                continue
-
-            month_num = (qtr - 1) * 3 + m_idx
-            ref_date = date(year, month_num, 12)
-            rows.append({
-                'industry_code': sector,
-                'ref_date': ref_date,
-                'employment': emp,
-                'qtr': qtr,
-                'geographic_type': geo_t,
-                'geographic_code': geo_c,
-            })
-
-    if not rows:
-        return pl.DataFrame()
-    return pl.DataFrame(rows)
-
-
-def extract_government_employment(raw: pl.DataFrame) -> pl.DataFrame:
-    """Extract government employment from QCEW data with ownership codes 1/2/3.
-
-    Government employment uses ``own_code`` (1=Federal, 2=State, 3=Local)
-    on the ``industry_code='10'`` (Total) rows.
-    """
-    required = [
-        'own_code', 'industry_code', 'year', 'qtr',
-        'month1_emplvl', 'month2_emplvl', 'month3_emplvl',
-    ]
-    for col in required:
-        if col not in raw.columns:
-            return pl.DataFrame()
-
-    rows: list[dict] = []
-    for row in raw.iter_rows(named=True):
-        own = str(row['own_code'])
-        govt_sector = GOVT_OWNERSHIP_TO_SECTOR.get(own)
-        if govt_sector is None:
-            continue
-        if str(row['industry_code']) != '10':
-            continue
-
-        year = int(row['year'])
-        qtr = int(row['qtr'])
-        geo_t = str(row.get('geographic_type', 'national'))
-        geo_c = str(row.get('geographic_code', '00'))
-
-        for m_idx, m_col in enumerate(
-            ['month1_emplvl', 'month2_emplvl', 'month3_emplvl'],
-            start=1,
-        ):
-            if row.get(m_col) is None:
-                continue
-            try:
-                emp = int(row[m_col])
-            except (ValueError, TypeError):
-                continue
-            if emp <= 0:
-                continue
-
-            month_num = (qtr - 1) * 3 + m_idx
-            ref_date = date(year, month_num, 12)
-            rows.append({
-                'industry_code': govt_sector,
-                'ref_date': ref_date,
-                'employment': emp,
-                'qtr': qtr,
-                'geographic_type': geo_t,
-                'geographic_code': geo_c,
-            })
-
-    if not rows:
-        return pl.DataFrame()
-    return pl.DataFrame(rows)
-
-
-def aggregate_to_hierarchy(sector_df: pl.DataFrame) -> pl.DataFrame:
-    """Aggregate sector employment into supersector and domain totals.
-
-    Args:
-        sector_df: Sector-level employment with columns ``industry_code``,
-            ``ref_date``, ``employment``, ``qtr``, ``geographic_type``,
-            ``geographic_code``.
-
-    Returns:
-        Combined DataFrame with sector, supersector, and domain rows. Each row has
-        an ``industry_type`` column.
-    """
-    if len(sector_df) == 0:
-        return pl.DataFrame()
-
-    result_parts = [
-        sector_df.with_columns(pl.lit('sector').alias('industry_type'))
-    ]
-
-    group_cols = ['geographic_type', 'geographic_code', 'ref_date', 'qtr']
-
-    # Supersectors: sum component sectors
-    ss_components = get_supersector_components()
-    for ss_code, component_sectors in ss_components.items():
-        ss_df = (
-            sector_df
-            .filter(pl.col('industry_code').is_in(component_sectors))
-            .group_by(group_cols)
-            .agg(pl.col('employment').sum())
-            .with_columns(
-                pl.lit(ss_code).alias('industry_code'),
-                pl.lit('supersector').alias('industry_type'),
-            )
-        )
-        if len(ss_df) > 0:
-            result_parts.append(ss_df)
-
-    # Domains: sum component supersectors
-    ss_rows = [p for p in result_parts if 'industry_type' in p.columns]
-    if len(ss_rows) > 1:
-        all_ss = pl.concat(
-            [p.filter(pl.col('industry_type') == 'supersector') for p in ss_rows],
-            how='diagonal_relaxed',
-        )
-    else:
-        all_ss = pl.DataFrame()
-
-    if len(all_ss) > 0:
-        for domain_code in ['00', '05', '06', '07', '08']:
-            component_ss = get_domain_supersectors(domain_code)
-            dom_df = (
-                all_ss
-                .filter(pl.col('industry_code').is_in(component_ss))
-                .group_by(group_cols)
-                .agg(pl.col('employment').sum())
-                .with_columns(
-                    pl.lit(domain_code).alias('industry_code'),
-                    pl.lit('domain').alias('industry_type'),
-                )
-            )
-            if len(dom_df) > 0:
-                result_parts.append(dom_df)
-
-    if not result_parts:
-        return pl.DataFrame()
-
-    return pl.concat(result_parts, how='diagonal_relaxed')
-
-
-def map_qcew_to_ces(
-    raw: pl.DataFrame,
-    include_government: bool = True,
-) -> pl.DataFrame:
-    """Map raw QCEW API data to CES industry groups.
-
-    Extracts private-sector employment by industry, optionally adds
-    government employment by ownership, then aggregates through the
-    CES hierarchy (sectors → supersectors → domains).
-
-    Args:
-        raw: Raw QCEW data from ``fetch_qcew`` or ``fetch_qcew_with_geography``.
-        include_government: If ``True``, extract government employment from ownership
-            codes 1/2/3 and include sectors 91, 92, 93.
-
-    Returns:
-        Employment data with columns ``geographic_type``, ``geographic_code``,
-        ``industry_type``, ``industry_code``, ``ref_date``, ``employment``, ``qtr``.
-    """
-    if len(raw) == 0:
-        return pl.DataFrame()
-
-    # Private-sector employment (own_code='5')
-    if 'own_code' in raw.columns:
-        private_raw = raw.filter(pl.col('own_code') == '5')
-    else:
-        private_raw = raw
-    sector_emp = extract_sector_employment(private_raw)
-
-    # Government employment (own_code 1/2/3 on industry_code='10')
-    if include_government and 'own_code' in raw.columns:
-        govt_raw = raw.filter(pl.col('own_code').is_in(['1', '2', '3']))
-        if len(govt_raw) > 0:
-            govt_emp = extract_government_employment(govt_raw)
-            if len(govt_emp) > 0:
-                sector_emp = (
-                    pl.concat([sector_emp, govt_emp], how='diagonal_relaxed')
-                    if len(sector_emp) > 0
-                    else govt_emp
-                )
-
-    if len(sector_emp) == 0:
-        return pl.DataFrame()
-
-    return aggregate_to_hierarchy(sector_emp)
-
-
-# ---------------------------------------------------------------------------
-# Bulk mapping (from download_qcew_bulk output)
+# Bulk mapping
 # ---------------------------------------------------------------------------
 
 def map_bulk_to_ces(bulk_path: Path | str) -> pl.DataFrame:
@@ -449,8 +195,10 @@ def map_bulk_to_ces(bulk_path: Path | str) -> pl.DataFrame:
 
     # Combine all sector rows
     keep_cols = [
-        'geographic_type', 'geographic_code', 'industry_type',
-        'industry_code', 'ref_date', 'employment',
+        'ref_date', 
+        'geographic_type', 'geographic_code', 
+        'industry_type', 'industry_code', 
+        'employment',
     ]
     all_sectors = pl.concat([
         private_sectors.select(keep_cols),
