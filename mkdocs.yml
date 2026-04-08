@@ -1,0 +1,60 @@
+site_name: bls-stats
+site_description: Download QCEW data from BLS and map to CES industry groups
+repo_url: https://github.com/lowmason/bls-stats
+
+theme:
+  name: material
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.expand
+    - toc.follow
+    - content.code.copy
+
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          paths: [src]
+          options:
+            docstring_style: google
+            show_source: true
+            show_root_heading: true
+            show_symbol_type_heading: true
+            members_order: source
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.superfences
+  - admonition
+  - pymdownx.details
+  - toc:
+      permalink: true
+
+nav:
+  - Home: index.md
+  - User guide: user-guide.md
+  - API reference:
+      - Package: api/package.md
+      - bls_stats.download: api/download.md
+      - bls_stats.geography: api/geography.md
+      - bls_stats.http_client: api/http_client.md
+      - bls_stats.industry: api/industry.md
+      - bls_stats.mapping: api/mapping.md
