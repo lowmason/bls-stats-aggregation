@@ -112,5 +112,36 @@ class TestGetWithRetry:
         _, kwargs = mock_client.get.call_args
         assert 'registrationkey' not in kwargs['params']
 
+    @patch('bls_stats.http_client.time.sleep')
+    def test_exhausted_retries_raises(self, mock_sleep):
+        mock_client = MagicMock()
+        error = MagicMock()
+        error.status_code = 503
+        error.raise_for_status.side_effect = httpx.HTTPStatusError(
+            '503', request=MagicMock(), response=error,
+        )
+        mock_client.get.return_value = error
+
+        with pytest.raises(httpx.HTTPStatusError):
+            get_with_retry(mock_client, 'https://example.com/test', max_retries=3)
+        assert mock_client.get.call_count == 3
+        assert mock_sleep.call_count == 3
+
+    @patch('bls_stats.http_client.time.sleep')
+    def test_exhausted_retries_returns_on_success_status(self, mock_sleep):
+        """After all retries, if the last response is actually OK, return it."""
+        mock_client = MagicMock()
+        error = MagicMock()
+        error.status_code = 500
+        # Last attempt also returns 500, but raise_for_status is still called
+        mock_client.get.return_value = error
+        error.raise_for_status.side_effect = httpx.HTTPStatusError(
+            '500', request=MagicMock(), response=error,
+        )
+
+        with pytest.raises(httpx.HTTPStatusError):
+            get_with_retry(mock_client, 'https://example.com/test', max_retries=2)
+        assert mock_client.get.call_count == 2
+
     def test_max_retries_constant(self):
         assert MAX_RETRIES == 8

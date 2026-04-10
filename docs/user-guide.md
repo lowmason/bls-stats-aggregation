@@ -8,7 +8,7 @@ pip install -e .
 
 Requires Python 3.11+ with `polars` and `httpx`.
 
-## Usage
+## QCEW pipeline
 
 Downloads yearly ~280 MB singlefile ZIPs from `data.bls.gov/cew/data/files/` (available from 2003 onward), filters to national + state rows, and saves a compact parquet. Then maps to the full CES industry hierarchy including 3-digit manufacturing split into durable/nondurable.
 
@@ -24,7 +24,43 @@ ces = map_bulk_to_ces(path)
 print(ces)
 ```
 
+Output columns: `industry_type`, `industry_code`, `geographic_type`, `geographic_code`, `ref_date`, `employment`.
+
 Set `BLS_API_KEY` in your environment for higher BLS rate limits.
+
+## JOLTS pipeline
+
+Downloads the `jt.data.1.AllItems` tab-separated flat file (~33 MB) from `download.bls.gov`, filters to seasonally adjusted national estimates for private industries, and maps to the CES hierarchy at the domain and supersector levels.
+
+```python
+from bls_stats import download_jolts
+from bls_stats.jolts import map_jolts_to_ces
+
+# Download and filter (writes parquet)
+path = download_jolts()
+
+# Map to CES industry groups
+jolts = map_jolts_to_ces(path)
+print(jolts)
+```
+
+Output columns: `industry_type`, `industry_code`, `rate_or_level`, `data_element`, `ref_date`, `value`.
+
+JOLTS data includes two data elements: **hires** and **total separations**, each reported as both a level (thousands) and a rate (percent). The mapping covers Total Private (domain `05`) and 10 supersectors. Domains `06` (Goods-Producing) and `08` (Private Service-Providing) are derived by aggregating supersector estimates, with rates computed as employment-weighted averages.
+
+## Geography
+
+The `bls_stats.geography` module provides state FIPS codes and Census region/division mappings used by the QCEW pipeline to aggregate state-level data.
+
+```python
+from bls_stats import (
+    CENSUS_REGIONS,           # {'Northeast': ['09', '23', ...], ...}
+    CENSUS_DIVISIONS,         # {'New England': ['09', '23', ...], ...}
+    DIVISION_TO_REGION,       # {'New England': 'Northeast', ...}
+    STATE_FIPS_TO_DIVISION,   # {'09': 'New England', ...}
+    STATE_FIPS_TO_REGION,     # {'09': 'Northeast', ...}
+)
+```
 
 ## Industry hierarchy
 

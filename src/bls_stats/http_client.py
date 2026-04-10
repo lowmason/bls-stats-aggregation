@@ -72,4 +72,4 @@ def get_with_retry(
         r.raise_for_status()
         return r
     r.raise_for_status()
-    return r
+    return r  # pragma: no cover — raise_for_status always raises on 429/5xx

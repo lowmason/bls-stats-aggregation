@@ -1,5 +1,5 @@
 site_name: bls-stats
-site_description: Download QCEW data from BLS and map to CES industry groups
+site_description: Download BLS data (QCEW, JOLTS) and map to CES industry groups
 repo_url: https://github.com/lowmason/bls-stats
 
 theme:

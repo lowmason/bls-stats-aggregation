@@ -14,8 +14,8 @@ from bls_stats.geography import (
 
 class TestStates:
     def test_count(self):
-        # 50 states + DC + Puerto Rico = 52
-        assert len(STATES) == 52
+        # 50 states + DC + Puerto Rico + Virgin Islands = 53
+        assert len(STATES) == 53
 
     def test_sorted(self):
         assert STATES == sorted(STATES)
@@ -25,9 +25,10 @@ class TestStates:
             assert len(fips) == 2
             assert fips.isdigit()
 
-    def test_includes_dc_and_pr(self):
+    def test_includes_dc_pr_vi(self):
         assert '11' in STATES  # DC
         assert '72' in STATES  # PR
+        assert '78' in STATES  # VI
 
 
 class TestFipsToName:
@@ -89,8 +90,9 @@ class TestStateFipsToDivision:
         # 50 states + DC = 51 (Puerto Rico excluded)
         assert len(STATE_FIPS_TO_DIVISION) == 51
 
-    def test_puerto_rico_excluded(self):
-        assert '72' not in STATE_FIPS_TO_DIVISION
+    def test_territories_excluded(self):
+        assert '72' not in STATE_FIPS_TO_DIVISION  # PR
+        assert '78' not in STATE_FIPS_TO_DIVISION  # VI
 
     def test_sample_assignments(self):
         assert STATE_FIPS_TO_DIVISION['06'] == '9'  # California → Pacific
@@ -103,9 +105,10 @@ class TestStateFipsToDivision:
         for div in STATE_FIPS_TO_DIVISION.values():
             assert div in CENSUS_DIVISIONS
 
-    def test_all_states_except_pr_are_mapped(self):
+    def test_all_states_except_territories_are_mapped(self):
+        territories = {'72', '78'}  # PR, VI
         for fips in STATES:
-            if fips == '72':
+            if fips in territories:
                 continue
             assert fips in STATE_FIPS_TO_DIVISION
 
