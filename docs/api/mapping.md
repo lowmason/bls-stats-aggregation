@@ -1,3 +1,3 @@
-# qcew_stats.mapping
+# bls_stats.qcew.mapping
 
-::: qcew_stats.mapping
+::: bls_stats.qcew.mapping

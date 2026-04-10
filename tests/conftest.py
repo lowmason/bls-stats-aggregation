@@ -1,3 +1,3 @@
-"""Shared fixtures for qcew-stats tests."""
+"""Shared fixtures for bls-stats tests."""
 
 from __future__ import annotations

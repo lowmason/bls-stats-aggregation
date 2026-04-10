@@ -1,6 +1,6 @@
-# qcew-stats
+# bls-stats
 
-[![Coverage](https://codecov.io/gh/lowmason/qcew-stats/graph/badge.svg)](https://codecov.io/gh/lowmason/qcew-stats)
+[![Coverage](https://codecov.io/gh/lowmason/bls-stats/graph/badge.svg)](https://codecov.io/gh/lowmason/bls-stats)
 
 Download QCEW (Quarterly Census of Employment and Wages) data from BLS and map it to CES (Current Employment Statistics) industry groups.
 
@@ -17,7 +17,7 @@ Requires Python 3.11+ with `polars` and `httpx`.
 Downloads yearly ~280 MB singlefile ZIPs from `data.bls.gov/cew/data/files/` (available from 2003 onward), filters to national + state rows, and saves a compact parquet. Then maps to the full CES industry hierarchy including 3-digit manufacturing split into durable/nondurable.
 
 ```python
-from qcew_stats import download_qcew_bulk, map_bulk_to_ces
+from bls_stats import download_qcew_bulk, map_bulk_to_ces
 
 # Download and filter (writes parquet)
 path = download_qcew_bulk(start_year=2020, end_year=2024)
@@ -53,7 +53,7 @@ The CES industry structure has three levels:
 ### Key constants
 
 ```python
-from qcew_stats import (
+from bls_stats import (
     INDUSTRY_HIERARCHY,           # Polars LazyFrame: sector → supersector → domain
     INDUSTRY_MAP,                 # List[IndustryEntry]: all CES industry codes
     DOMAIN_DEFINITIONS,           # Domain code → name, includes_govt, goods_only

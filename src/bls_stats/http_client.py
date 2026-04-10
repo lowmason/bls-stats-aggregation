@@ -16,7 +16,7 @@ import httpx
 logger = logging.getLogger(__name__)
 
 _USER_AGENT = (
-    'qcew-stats/0.1.0 '
+    'bls-stats/0.1.0 '
     '(Python; httpx/{httpx_version})'
 ).format(httpx_version=httpx.__version__)
 

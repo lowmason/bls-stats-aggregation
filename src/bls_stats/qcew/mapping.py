@@ -17,6 +17,10 @@ from pathlib import Path
 
 import polars as pl
 
+from ..geography import (
+    DIVISION_TO_REGION,
+    STATE_FIPS_TO_DIVISION,
+)
 from .industry import (
     GOVT_OWNERSHIP_TO_SECTOR,
     NAICS3_TO_MFG_SECTOR,
@@ -241,6 +245,41 @@ def map_bulk_to_ces(bulk_path: Path | str) -> pl.DataFrame:
         supersector_rows.select(keep_cols),
         pl.concat(domain_frames).select(keep_cols),
     ])
+
+    # ------------------------------------------------------------------
+    # Aggregate state rows → Census divisions → Census regions
+    # ------------------------------------------------------------------
+    state_rows = combined.filter(pl.col('geographic_type') == 'state')
+
+    div_map = pl.DataFrame({
+        'geographic_code': list(STATE_FIPS_TO_DIVISION.keys()),
+        'division_code': list(STATE_FIPS_TO_DIVISION.values()),
+    })
+    division_rows = (
+        state_rows
+        .join(div_map, on='geographic_code', how='inner')
+        .group_by(['ref_date', 'industry_type', 'industry_code', 'division_code'])
+        .agg(employment=pl.col('employment').sum())
+        .rename({'division_code': 'geographic_code'})
+        .with_columns(geographic_type=pl.lit('division'))
+        .select(keep_cols)
+    )
+
+    reg_map = pl.DataFrame({
+        'geographic_code': list(DIVISION_TO_REGION.keys()),
+        'region_code': list(DIVISION_TO_REGION.values()),
+    })
+    region_rows = (
+        division_rows
+        .join(reg_map, on='geographic_code', how='inner')
+        .group_by(['ref_date', 'industry_type', 'industry_code', 'region_code'])
+        .agg(employment=pl.col('employment').sum())
+        .rename({'region_code': 'geographic_code'})
+        .with_columns(geographic_type=pl.lit('region'))
+        .select(keep_cols)
+    )
+
+    combined = pl.concat([combined, division_rows, region_rows])
 
     # Convert employment from counts to thousands
     combined = combined.with_columns(

@@ -1,13 +1,11 @@
-"""Download QCEW bulk data from BLS and map to CES industry groups.
+"""QCEW-to-CES industry mapping subpackage.
 
-    >>> from qcew_stats import download_qcew_bulk, map_bulk_to_ces
-    >>> path = download_qcew_bulk(start_year=2020, end_year=2024)
-    >>> ces = map_bulk_to_ces(path)
+Maps QCEW (Quarterly Census of Employment and Wages) bulk data to the
+CES (Current Employment Statistics) industry hierarchy.
 """
 
-from .download import (
-    download_qcew_bulk,
-)
+from __future__ import annotations
+
 from .industry import (
     CES_SECTOR_TO_NAICS,
     DOMAIN_DEFINITIONS,
@@ -27,9 +25,6 @@ from .mapping import (
 )
 
 __all__ = [
-    # Download
-    'download_qcew_bulk',
-    # Industry hierarchy
     'CES_SECTOR_TO_NAICS',
     'DOMAIN_DEFINITIONS',
     'GOVT_OWNERSHIP_TO_SECTOR',
@@ -42,6 +37,5 @@ __all__ = [
     'get_sector_codes',
     'get_supersector_codes',
     'get_supersector_components',
-    # Mapping
     'map_bulk_to_ces',
 ]

@@ -1,4 +1,4 @@
-# qcew-stats
+# bls-stats
 
 Download QCEW (Quarterly Census of Employment and Wages) data from BLS and map it to CES (Current Employment Statistics) industry groups.
 

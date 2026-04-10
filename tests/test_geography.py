@@ -1,6 +1,15 @@
-"""Tests for qcew_stats.geography constants."""
+"""Tests for bls_stats.geography constants."""
 
-from qcew_stats.geography import STATE_FIPS_TO_NAME, STATE_NAME_TO_FIPS, STATES
+from bls_stats.geography import (
+    CENSUS_DIVISIONS,
+    CENSUS_REGIONS,
+    DIVISION_TO_REGION,
+    STATE_FIPS_TO_DIVISION,
+    STATE_FIPS_TO_NAME,
+    STATE_FIPS_TO_REGION,
+    STATE_NAME_TO_FIPS,
+    STATES,
+)
 
 
 class TestStates:
@@ -39,3 +48,77 @@ class TestNameToFips:
     def test_roundtrip(self):
         for fips, name in STATE_FIPS_TO_NAME.items():
             assert STATE_NAME_TO_FIPS[name] == fips
+
+
+class TestCensusRegions:
+    def test_four_regions(self):
+        assert len(CENSUS_REGIONS) == 4
+
+    def test_region_names(self):
+        assert CENSUS_REGIONS['1'] == 'Northeast'
+        assert CENSUS_REGIONS['2'] == 'Midwest'
+        assert CENSUS_REGIONS['3'] == 'South'
+        assert CENSUS_REGIONS['4'] == 'West'
+
+
+class TestCensusDivisions:
+    def test_nine_divisions(self):
+        assert len(CENSUS_DIVISIONS) == 9
+
+    def test_sample_division_names(self):
+        assert CENSUS_DIVISIONS['1'] == 'New England'
+        assert CENSUS_DIVISIONS['5'] == 'South Atlantic'
+        assert CENSUS_DIVISIONS['9'] == 'Pacific'
+
+
+class TestDivisionToRegion:
+    def test_all_divisions_mapped(self):
+        assert set(DIVISION_TO_REGION.keys()) == set(CENSUS_DIVISIONS.keys())
+
+    def test_northeast_divisions(self):
+        assert DIVISION_TO_REGION['1'] == '1'
+        assert DIVISION_TO_REGION['2'] == '1'
+
+    def test_all_values_are_valid_regions(self):
+        for region in DIVISION_TO_REGION.values():
+            assert region in CENSUS_REGIONS
+
+
+class TestStateFipsToDivision:
+    def test_covers_50_states_plus_dc(self):
+        # 50 states + DC = 51 (Puerto Rico excluded)
+        assert len(STATE_FIPS_TO_DIVISION) == 51
+
+    def test_puerto_rico_excluded(self):
+        assert '72' not in STATE_FIPS_TO_DIVISION
+
+    def test_sample_assignments(self):
+        assert STATE_FIPS_TO_DIVISION['06'] == '9'  # California → Pacific
+        assert STATE_FIPS_TO_DIVISION['36'] == '2'  # New York → Middle Atlantic
+        assert STATE_FIPS_TO_DIVISION['48'] == '7'  # Texas → West South Central
+        assert STATE_FIPS_TO_DIVISION['17'] == '3'  # Illinois → East North Central
+        assert STATE_FIPS_TO_DIVISION['11'] == '5'  # DC → South Atlantic
+
+    def test_all_values_are_valid_divisions(self):
+        for div in STATE_FIPS_TO_DIVISION.values():
+            assert div in CENSUS_DIVISIONS
+
+    def test_all_states_except_pr_are_mapped(self):
+        for fips in STATES:
+            if fips == '72':
+                continue
+            assert fips in STATE_FIPS_TO_DIVISION
+
+
+class TestStateFipsToRegion:
+    def test_same_keys_as_division_map(self):
+        assert set(STATE_FIPS_TO_REGION.keys()) == set(STATE_FIPS_TO_DIVISION.keys())
+
+    def test_derived_correctly(self):
+        for fips, region in STATE_FIPS_TO_REGION.items():
+            assert region == DIVISION_TO_REGION[STATE_FIPS_TO_DIVISION[fips]]
+
+    def test_sample_assignments(self):
+        assert STATE_FIPS_TO_REGION['06'] == '4'  # California → West
+        assert STATE_FIPS_TO_REGION['36'] == '1'  # New York → Northeast
+        assert STATE_FIPS_TO_REGION['48'] == '3'  # Texas → South

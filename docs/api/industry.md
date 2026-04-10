@@ -1,3 +1,3 @@
-# qcew_stats.industry
+# bls_stats.qcew.industry
 
-::: qcew_stats.industry
+::: bls_stats.qcew.industry
