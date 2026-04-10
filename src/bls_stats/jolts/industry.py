@@ -16,28 +16,29 @@ import polars as pl
 # Each key is a 6-digit JOLTS industry code; value is (ces_code, industry_type).
 
 JOLTS_TO_CES: dict[str, tuple[str, str]] = {
-    '100000': ('05', 'domain'),       # Total Private
-    '110099': ('10', 'supersector'),   # Mining and Logging
-    '230000': ('20', 'supersector'),   # Construction
-    '300000': ('30', 'supersector'),   # Manufacturing
-    '400000': ('40', 'supersector'),   # Trade, Transportation, and Utilities
-    '510000': ('50', 'supersector'),   # Information
-    '510099': ('55', 'supersector'),   # Financial Activities
-    '540099': ('60', 'supersector'),   # Professional and Business Services
-    '600000': ('65', 'supersector'),   # Education and Health Services
-    '700000': ('70', 'supersector'),   # Leisure and Hospitality
-    '810000': ('80', 'supersector'),   # Other Services
+    "000000": ("00", "national"),  # Total Nonfarm
+    "100000": ("05", "domain"),  # Total Private
+    "110099": ("10", "supersector"),  # Mining and Logging
+    "230000": ("20", "supersector"),  # Construction
+    "300000": ("30", "supersector"),  # Manufacturing
+    "400000": ("40", "supersector"),  # Trade, Transportation, and Utilities
+    "510000": ("50", "supersector"),  # Information
+    "510099": ("55", "supersector"),  # Financial Activities
+    "540099": ("60", "supersector"),  # Professional and Business Services
+    "600000": ("65", "supersector"),  # Education and Health Services
+    "700000": ("70", "supersector"),  # Leisure and Hospitality
+    "810000": ("80", "supersector"),  # Other Services
 }
 
-_GOODS_SUPERSECTORS: list[str] = ['10', '20', '30']
+_GOODS_SUPERSECTORS: list[str] = ["10", "20", "30"]
 
 # ---------------------------------------------------------------------------
 # Data elements (restricted to hires and total separations)
 # ---------------------------------------------------------------------------
 
 JOLTS_DATA_ELEMENTS: dict[str, str] = {
-    'HI': 'hires',
-    'TS': 'total_separations',
+    "HI": "hires",
+    "TS": "total_separations",
 }
 
 
@@ -57,6 +58,7 @@ JOLTS_DATA_ELEMENTS: dict[str, str] = {
 #   │└───────────────────── seasonal (S/U)
 #   └────────────────────── survey prefix (JT)
 
+
 def _parse_series_columns(df: pl.DataFrame) -> pl.DataFrame:
     """Extract component fields from the ``series_id`` column.
 
@@ -70,7 +72,7 @@ def _parse_series_columns(df: pl.DataFrame) -> pl.DataFrame:
         ``state_code``, ``area_code``, ``sizeclass_code``,
         ``dataelement_code``, ``ratelevel_code``.
     """
-    sid = pl.col('series_id')
+    sid = pl.col("series_id")
     return df.with_columns(
         seasonal=sid.str.slice(2, 1),
         industry_code=sid.str.slice(3, 6),
