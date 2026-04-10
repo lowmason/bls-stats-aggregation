@@ -7,6 +7,9 @@ data.  Program-specific modules live in subpackages (e.g. ``bls_stats.qcew``).
 from .download import (
     download_qcew_bulk,
 )
+from .jolts import (
+    download_jolts,
+)
 from .geography import (
     CENSUS_DIVISIONS,
     CENSUS_REGIONS,
@@ -17,6 +20,7 @@ from .geography import (
 
 __all__ = [
     # Download
+    'download_jolts',
     'download_qcew_bulk',
     # Geography
     'CENSUS_DIVISIONS',

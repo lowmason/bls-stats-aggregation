@@ -56,5 +56,6 @@ nav:
       - bls_stats.download: api/download.md
       - bls_stats.geography: api/geography.md
       - bls_stats.http_client: api/http_client.md
+      - bls_stats.jolts: api/jolts.md
       - bls_stats.qcew.industry: api/industry.md
       - bls_stats.qcew.mapping: api/mapping.md
