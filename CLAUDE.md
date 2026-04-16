@@ -2,7 +2,7 @@
 
 ## Project overview
 
-bls-stats-aggregation maps Bureau of Labor Statistics program data to the CES (Current Employment Statistics) industry hierarchy: sectors → supersectors → domains. Data is sourced from Trino data lakes (connectivity implemented in the data lake environment). Output is a long-format Polars DataFrame with employment levels keyed by geography and industry.
+bls-stats-aggregation maps Bureau of Labor Statistics program data to the CES (Current Employment Statistics) industry hierarchy: sectors → supersectors → domains. Data for all programs (QCEW, JOLTS, CES, SAE, BED) is queried from a Trino data lake. Output is a long-format Polars DataFrame with employment levels keyed by geography and industry.
 
 ## Repository layout
 
@@ -30,7 +30,7 @@ src/bls_stats_aggregation/    # Installable package (hatchling, src-layout)
     mapping.py
   data_source/                  # Data lake connectors
     __init__.py
-    trino.py                      # Trino placeholder (implemented in data lake env)
+    trino.py                      # Trino data lake connector (TrinoSource)
 tests/                          # pytest test suite
 docs/                           # mkdocs-material + mkdocstrings API docs
 data/                           # Output parquet files (gitignored)

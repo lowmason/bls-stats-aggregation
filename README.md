@@ -2,7 +2,17 @@
 
 [![Coverage](https://codecov.io/gh/lowmason/bls-stats-aggregation/graph/badge.svg)](https://codecov.io/gh/lowmason/bls-stats-aggregation)
 
-Download QCEW (Quarterly Census of Employment and Wages) data from BLS and map it to CES (Current Employment Statistics) industry groups.
+Map Bureau of Labor Statistics program data to the CES (Current Employment Statistics) industry hierarchy. Data for all programs is queried from a Trino data lake.
+
+## Supported programs
+
+| Program | Description |
+|---------|-------------|
+| **QCEW** | Quarterly Census of Employment and Wages — monthly employment levels by industry and geography |
+| **JOLTS** | Job Openings and Labor Turnover Survey — hires and total separations rates and levels by industry |
+| **CES** | Current Employment Statistics — industry hierarchy and canonical codes |
+| **SAE** | State and Area Employment — state-level employment estimates |
+| **BED** | Business Employment Dynamics — establishment births, deaths, expansions, and contractions |
 
 ## Install
 
@@ -10,24 +20,27 @@ Download QCEW (Quarterly Census of Employment and Wages) data from BLS and map i
 pip install -e .
 ```
 
-Requires Python 3.11+ with `polars` and `httpx`.
+Requires Python 3.11+ with `polars`. Install the `trino` extra for data lake connectivity:
+
+```bash
+pip install -e ".[trino]"
+```
 
 ## Usage
 
-Downloads yearly ~280 MB singlefile ZIPs from `data.bls.gov/cew/data/files/` (available from 2003 onward), filters to national + state rows, and saves a compact parquet. Then maps to the full CES industry hierarchy including 3-digit manufacturing split into durable/nondurable.
+All program data is queried from the Trino data lake via `TrinoSource`. The mapping pipelines read from Trino, filter and transform the data, and produce long-format Polars DataFrames keyed by geography and industry.
 
 ```python
-from bls_stats import download_qcew_bulk, map_bulk_to_ces
+from bls_stats_aggregation.data_source.trino import TrinoSource
+from bls_stats_aggregation.qcew.mapping import map_bulk_to_ces
 
-# Download and filter (writes parquet)
-path = download_qcew_bulk(start_year=2020, end_year=2024)
+source = TrinoSource(host="trino.example.com", catalog="hive", schema="bls")
 
-# Map to CES industry groups
-ces = map_bulk_to_ces(path)
+# Query QCEW data from the data lake and map to CES industry groups
+raw = source.read_qcew(start_year=2020, end_year=2024)
+ces = map_bulk_to_ces(raw)
 print(ces)
 ```
-
-Set `BLS_API_KEY` in your environment for higher BLS rate limits.
 
 ## Industry hierarchy
 
@@ -45,7 +58,7 @@ The CES industry structure has three levels:
 
 ### Mapping from QCEW
 
-- **By industry**: NAICS 2-digit codes from the bulk singlefiles are mapped to CES sector codes, then aggregated up through supersectors to domains.
+- **By industry**: NAICS 2-digit codes are mapped to CES sector codes, then aggregated up through supersectors to domains.
 - **By ownership**: Government employment uses `own_code` 1/2/3 (Federal/State/Local) on total industry rows, mapped to CES sectors 91/92/93.
 - **By state**: Area FIPS codes are mapped to `geographic_type` (national/state) and `geographic_code` (2-digit state FIPS).
 - **Manufacturing split**: 3-digit NAICS subsectors are split into durable goods (CES 31) and nondurable goods (CES 32) via `NAICS3_TO_MFG_SECTOR`.
@@ -53,7 +66,7 @@ The CES industry structure has three levels:
 ### Key constants
 
 ```python
-from bls_stats import (
+from bls_stats_aggregation.ces import (
     INDUSTRY_HIERARCHY,           # Polars LazyFrame: sector → supersector → domain
     INDUSTRY_MAP,                 # List[IndustryEntry]: all CES industry codes
     DOMAIN_DEFINITIONS,           # Domain code → name, includes_govt, goods_only

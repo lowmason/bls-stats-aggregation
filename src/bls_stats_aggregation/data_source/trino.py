@@ -1,7 +1,8 @@
 """Trino data lake connector for BLS program data.
 
-Placeholder for Trino connectivity — will be implemented in the
-data lake environment where ``trino`` is available.
+Provides ``TrinoSource`` for querying QCEW, JOLTS, CES, SAE, and BED
+program data from a Trino data lake. Trino connectivity is implemented
+in the data lake environment where the ``trino`` driver is available.
 """
 
 from __future__ import annotations

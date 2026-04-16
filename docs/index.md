@@ -1,11 +1,14 @@
 # bls-stats-aggregation
 
-Download and process Bureau of Labor Statistics data, mapping it to the CES (Current Employment Statistics) industry hierarchy.
+Map Bureau of Labor Statistics program data to the CES (Current Employment Statistics) industry hierarchy. All program data is queried from a Trino data lake.
 
-Currently supports two BLS programs:
+## Supported programs
 
 - **QCEW** (Quarterly Census of Employment and Wages) — monthly employment levels by industry and geography
 - **JOLTS** (Job Openings and Labor Turnover Survey) — hires and total separations rates and levels by industry
+- **CES** (Current Employment Statistics) — industry hierarchy and canonical codes
+- **SAE** (State and Area Employment) — state-level employment estimates
+- **BED** (Business Employment Dynamics) — establishment births, deaths, expansions, and contractions
 
 ## Quick links
 

@@ -1,5 +1,5 @@
 site_name: bls-stats-aggregation
-site_description: Download BLS data (QCEW, JOLTS) and map to CES industry groups
+site_description: Map BLS program data (QCEW, JOLTS, CES, SAE, BED) to CES industry groups via Trino data lake
 repo_url: https://github.com/lowmason/bls-stats-aggregation
 
 theme:
@@ -53,9 +53,8 @@ nav:
   - User guide: user-guide.md
   - API reference:
       - Package: api/package.md
-      - bls_stats.download: api/download.md
+      - bls_stats.data_source.trino: api/trino.md
       - bls_stats.geography: api/geography.md
-      - bls_stats.http_client: api/http_client.md
       - bls_stats.jolts: api/jolts.md
       - bls_stats.qcew.industry: api/industry.md
       - bls_stats.qcew.mapping: api/mapping.md

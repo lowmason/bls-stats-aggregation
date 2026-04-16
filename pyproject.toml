@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 name = "bls-stats-aggregation"
 version = "0.2.0"
-description = "Map BLS program data to CES industry groups"
+description = "Map BLS program data (QCEW, JOLTS, CES, SAE, BED) to CES industry groups via Trino data lake"
 requires-python = ">=3.11"
 dependencies = [
     "polars>=1.0",
