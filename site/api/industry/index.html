@@ -6,12 +6,12 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Download QCEW data from BLS and map to CES industry groups">
+        <meta name="description" content="Download BLS data (QCEW, JOLTS) and map to CES industry groups">
       
       
       
       
-        <link rel="prev" href="../http_client/">
+        <link rel="prev" href="../jolts/">
       
       
         <link rel="next" href="../mapping/">
@@ -25,7 +25,7 @@
     
     
       
-        <title>bls_stats.industry - bls-stats</title>
+        <title>bls_stats.qcew.industry - bls-stats-aggregation</title>
       
     
     
@@ -78,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#bls_statsindustry" class="md-skip">
+        <a href="#bls_statsqcewindustry" class="md-skip">
           Skip to content
         </a>
       
@@ -92,7 +92,7 @@
 
 <header class="md-header" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="../.." title="bls-stats" class="md-header__button md-logo" aria-label="bls-stats" data-md-component="logo">
+    <a href="../.." title="bls-stats-aggregation" class="md-header__button md-logo" aria-label="bls-stats-aggregation" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -106,13 +106,13 @@
       <div class="md-header__ellipsis">
         <div class="md-header__topic">
           <span class="md-ellipsis">
-            bls-stats
+            bls-stats-aggregation
           </span>
         </div>
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              bls_stats.industry
+              bls_stats.qcew.industry
             
           </span>
         </div>
@@ -190,6 +190,18 @@
 </div>
       
     
+    
+      <div class="md-header__source">
+        <a href="https://github.com/lowmason/bls-stats-aggregation" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
     
   </nav>
   
@@ -287,14 +299,26 @@
 
 <nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="../.." title="bls-stats" class="md-nav__button md-logo" aria-label="bls-stats" data-md-component="logo">
+    <a href="../.." title="bls-stats-aggregation" class="md-nav__button md-logo" aria-label="bls-stats-aggregation" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
 
     </a>
-    bls-stats
+    bls-stats-aggregation
   </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/lowmason/bls-stats-aggregation" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
   
   <ul class="md-nav__list" data-md-scrollfix>
     
@@ -525,6 +549,34 @@
                 
   
   
+  
+  
+    <li class="md-nav__item">
+      <a href="../jolts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    bls_stats.jolts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
     
   
   
@@ -544,7 +596,7 @@
   <span class="md-ellipsis">
     
   
-    bls_stats.industry
+    bls_stats.qcew.industry
   
 
     
@@ -562,7 +614,7 @@
   <span class="md-ellipsis">
     
   
-    bls_stats.industry
+    bls_stats.qcew.industry
   
 
     
@@ -588,7 +640,7 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#bls_stats.industry" class="md-nav__link">
+  <a href="#bls_stats.qcew.industry" class="md-nav__link">
     <span class="md-ellipsis">
       
         industry
@@ -600,7 +652,7 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#bls_stats.industry.INDUSTRY_MAP" class="md-nav__link">
+  <a href="#bls_stats.qcew.industry.INDUSTRY_MAP" class="md-nav__link">
     <span class="md-ellipsis">
       
         INDUSTRY_MAP
@@ -611,7 +663,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#bls_stats.industry.IndustryEntry" class="md-nav__link">
+  <a href="#bls_stats.qcew.industry.IndustryEntry" class="md-nav__link">
     <span class="md-ellipsis">
       
         IndustryEntry
@@ -622,7 +674,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#bls_stats.industry.get_sector_codes" class="md-nav__link">
+  <a href="#bls_stats.qcew.industry.get_sector_codes" class="md-nav__link">
     <span class="md-ellipsis">
       
         get_sector_codes
@@ -633,7 +685,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#bls_stats.industry.get_supersector_codes" class="md-nav__link">
+  <a href="#bls_stats.qcew.industry.get_supersector_codes" class="md-nav__link">
     <span class="md-ellipsis">
       
         get_supersector_codes
@@ -644,7 +696,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#bls_stats.industry.get_supersector_components" class="md-nav__link">
+  <a href="#bls_stats.qcew.industry.get_supersector_components" class="md-nav__link">
     <span class="md-ellipsis">
       
         get_supersector_components
@@ -655,21 +707,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#bls_stats.industry.get_domain_supersectors" class="md-nav__link">
+  <a href="#bls_stats.qcew.industry.get_domain_supersectors" class="md-nav__link">
     <span class="md-ellipsis">
       
         get_domain_supersectors
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#bls_stats.industry.qcew_to_sector" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        qcew_to_sector
       
     </span>
   </a>
@@ -704,7 +745,7 @@
   <span class="md-ellipsis">
     
   
-    bls_stats.mapping
+    bls_stats.qcew.mapping
   
 
     
@@ -752,7 +793,7 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#bls_stats.industry" class="md-nav__link">
+  <a href="#bls_stats.qcew.industry" class="md-nav__link">
     <span class="md-ellipsis">
       
         industry
@@ -764,7 +805,7 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#bls_stats.industry.INDUSTRY_MAP" class="md-nav__link">
+  <a href="#bls_stats.qcew.industry.INDUSTRY_MAP" class="md-nav__link">
     <span class="md-ellipsis">
       
         INDUSTRY_MAP
@@ -775,7 +816,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#bls_stats.industry.IndustryEntry" class="md-nav__link">
+  <a href="#bls_stats.qcew.industry.IndustryEntry" class="md-nav__link">
     <span class="md-ellipsis">
       
         IndustryEntry
@@ -786,7 +827,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#bls_stats.industry.get_sector_codes" class="md-nav__link">
+  <a href="#bls_stats.qcew.industry.get_sector_codes" class="md-nav__link">
     <span class="md-ellipsis">
       
         get_sector_codes
@@ -797,7 +838,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#bls_stats.industry.get_supersector_codes" class="md-nav__link">
+  <a href="#bls_stats.qcew.industry.get_supersector_codes" class="md-nav__link">
     <span class="md-ellipsis">
       
         get_supersector_codes
@@ -808,7 +849,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#bls_stats.industry.get_supersector_components" class="md-nav__link">
+  <a href="#bls_stats.qcew.industry.get_supersector_components" class="md-nav__link">
     <span class="md-ellipsis">
       
         get_supersector_components
@@ -819,21 +860,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#bls_stats.industry.get_domain_supersectors" class="md-nav__link">
+  <a href="#bls_stats.qcew.industry.get_domain_supersectors" class="md-nav__link">
     <span class="md-ellipsis">
       
         get_domain_supersectors
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#bls_stats.industry.qcew_to_sector" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        qcew_to_sector
       
     </span>
   </a>
@@ -861,19 +891,22 @@
                   
 
 
+  
+  
 
-<h1 id="bls_statsindustry">bls_stats.industry<a class="headerlink" href="#bls_statsindustry" title="Permanent link">&para;</a></h1>
+
+<h1 id="bls_statsqcewindustry">bls_stats.qcew.industry<a class="headerlink" href="#bls_statsqcewindustry" title="Permanent link">&para;</a></h1>
 
 
 <div class="doc doc-object doc-module">
 
 
 
-<h2 id="bls_stats.industry" class="doc doc-heading">
-<code class="doc-symbol doc-symbol-heading doc-symbol-module"></code>            <code>bls_stats.industry</code>
+<h2 id="bls_stats.qcew.industry" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-module"></code>            <code>bls_stats.qcew.industry</code>
 
 
-<a href="#bls_stats.industry" class="headerlink" title="Permanent link">&para;</a></h2>
+<a href="#bls_stats.qcew.industry" class="headerlink" title="Permanent link">&para;</a></h2>
 
     <div class="doc doc-contents first">
 
@@ -907,14 +940,14 @@ the 3-digit NAICS split of manufacturing into durable/nondurable goods.</p>
 
 
 
-<h3 id="bls_stats.industry.INDUSTRY_MAP" class="doc doc-heading">
+<h3 id="bls_stats.qcew.industry.INDUSTRY_MAP" class="doc doc-heading">
 <code class="doc-symbol doc-symbol-heading doc-symbol-attribute"></code>            <code class="highlight language-python"><span class="n">INDUSTRY_MAP</span> <span class="o">=</span> <span class="n">_build_industry_map</span><span class="p">()</span></code>
 
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-module-attribute"><code>module-attribute</code></small>
   </span>
 
-<a href="#bls_stats.industry.INDUSTRY_MAP" class="headerlink" title="Permanent link">&para;</a></h3>
+<a href="#bls_stats.qcew.industry.INDUSTRY_MAP" class="headerlink" title="Permanent link">&para;</a></h3>
 
 
     <div class="doc doc-contents ">
@@ -931,7 +964,7 @@ the 3-digit NAICS split of manufacturing into durable/nondurable goods.</p>
 
 
 
-<h3 id="bls_stats.industry.IndustryEntry" class="doc doc-heading">
+<h3 id="bls_stats.qcew.industry.IndustryEntry" class="doc doc-heading">
 <code class="doc-symbol doc-symbol-heading doc-symbol-class"></code>            <code>IndustryEntry</code>
 
 
@@ -939,7 +972,7 @@ the 3-digit NAICS split of manufacturing into durable/nondurable goods.</p>
       <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
   </span>
 
-<a href="#bls_stats.industry.IndustryEntry" class="headerlink" title="Permanent link">&para;</a></h3>
+<a href="#bls_stats.qcew.industry.IndustryEntry" class="headerlink" title="Permanent link">&para;</a></h3>
 
 
     <div class="doc doc-contents ">
@@ -960,7 +993,7 @@ the 3-digit NAICS split of manufacturing into durable/nondurable goods.</p>
       </thead>
       <tbody>
           <tr class="doc-section-item">
-            <td><code><span title="bls_stats.industry.IndustryEntry.industry_code">industry_code</span></code></td>
+            <td><code><span title="bls_stats.qcew.industry.IndustryEntry.industry_code">industry_code</span></code></td>
             <td>
                   <code><span title="str">str</span></code>
             </td>
@@ -971,7 +1004,7 @@ the 3-digit NAICS split of manufacturing into durable/nondurable goods.</p>
             </td>
           </tr>
           <tr class="doc-section-item">
-            <td><code><span title="bls_stats.industry.IndustryEntry.industry_type">industry_type</span></code></td>
+            <td><code><span title="bls_stats.qcew.industry.IndustryEntry.industry_type">industry_type</span></code></td>
             <td>
                   <code><span title="str">str</span></code>
             </td>
@@ -982,7 +1015,7 @@ the 3-digit NAICS split of manufacturing into durable/nondurable goods.</p>
             </td>
           </tr>
           <tr class="doc-section-item">
-            <td><code><span title="bls_stats.industry.IndustryEntry.industry_name">industry_name</span></code></td>
+            <td><code><span title="bls_stats.qcew.industry.IndustryEntry.industry_name">industry_name</span></code></td>
             <td>
                   <code><span title="str">str</span></code>
             </td>
@@ -993,7 +1026,7 @@ the 3-digit NAICS split of manufacturing into durable/nondurable goods.</p>
             </td>
           </tr>
           <tr class="doc-section-item">
-            <td><code><span title="bls_stats.industry.IndustryEntry.ces_code">ces_code</span></code></td>
+            <td><code><span title="bls_stats.qcew.industry.IndustryEntry.ces_code">ces_code</span></code></td>
             <td>
                   <code><span title="str">str</span></code>
             </td>
@@ -1004,7 +1037,7 @@ the 3-digit NAICS split of manufacturing into durable/nondurable goods.</p>
             </td>
           </tr>
           <tr class="doc-section-item">
-            <td><code><span title="bls_stats.industry.IndustryEntry.qcew_naics">qcew_naics</span></code></td>
+            <td><code><span title="bls_stats.qcew.industry.IndustryEntry.qcew_naics">qcew_naics</span></code></td>
             <td>
                   <code><span title="str">str</span></code>
             </td>
@@ -1025,7 +1058,7 @@ the 3-digit NAICS split of manufacturing into durable/nondurable goods.</p>
 
 
               <details class="mkdocstrings-source">
-                <summary>Source code in <code>src/bls_stats/industry.py</code></summary>
+                <summary>Source code in <code>src/bls_stats/qcew/industry.py</code></summary>
                 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-221">221</a></span>
 <span class="normal"><a href="#__codelineno-0-222">222</a></span>
 <span class="normal"><a href="#__codelineno-0-223">223</a></span>
@@ -1087,10 +1120,10 @@ the 3-digit NAICS split of manufacturing into durable/nondurable goods.</p>
 <div class="doc doc-object doc-function">
 
 
-<h3 id="bls_stats.industry.get_sector_codes" class="doc doc-heading">
+<h3 id="bls_stats.qcew.industry.get_sector_codes" class="doc doc-heading">
 <code class="doc-symbol doc-symbol-heading doc-symbol-function"></code>            <code class="highlight language-python"><span class="n">get_sector_codes</span><span class="p">()</span></code>
 
-<a href="#bls_stats.industry.get_sector_codes" class="headerlink" title="Permanent link">&para;</a></h3>
+<a href="#bls_stats.qcew.industry.get_sector_codes" class="headerlink" title="Permanent link">&para;</a></h3>
 
 
     <div class="doc doc-contents ">
@@ -1099,7 +1132,7 @@ the 3-digit NAICS split of manufacturing into durable/nondurable goods.</p>
 
 
             <details class="mkdocstrings-source">
-              <summary>Source code in <code>src/bls_stats/industry.py</code></summary>
+              <summary>Source code in <code>src/bls_stats/qcew/industry.py</code></summary>
               <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-72">72</a></span>
 <span class="normal"><a href="#__codelineno-0-73">73</a></span>
 <span class="normal"><a href="#__codelineno-0-74">74</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-72" name="__codelineno-0-72"></a><span class="k">def</span><span class="w"> </span><span class="nf">get_sector_codes</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
@@ -1114,10 +1147,10 @@ the 3-digit NAICS split of manufacturing into durable/nondurable goods.</p>
 <div class="doc doc-object doc-function">
 
 
-<h3 id="bls_stats.industry.get_supersector_codes" class="doc doc-heading">
+<h3 id="bls_stats.qcew.industry.get_supersector_codes" class="doc doc-heading">
 <code class="doc-symbol doc-symbol-heading doc-symbol-function"></code>            <code class="highlight language-python"><span class="n">get_supersector_codes</span><span class="p">()</span></code>
 
-<a href="#bls_stats.industry.get_supersector_codes" class="headerlink" title="Permanent link">&para;</a></h3>
+<a href="#bls_stats.qcew.industry.get_supersector_codes" class="headerlink" title="Permanent link">&para;</a></h3>
 
 
     <div class="doc doc-contents ">
@@ -1126,7 +1159,7 @@ the 3-digit NAICS split of manufacturing into durable/nondurable goods.</p>
 
 
             <details class="mkdocstrings-source">
-              <summary>Source code in <code>src/bls_stats/industry.py</code></summary>
+              <summary>Source code in <code>src/bls_stats/qcew/industry.py</code></summary>
               <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-77">77</a></span>
 <span class="normal"><a href="#__codelineno-0-78">78</a></span>
 <span class="normal"><a href="#__codelineno-0-79">79</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-77" name="__codelineno-0-77"></a><span class="k">def</span><span class="w"> </span><span class="nf">get_supersector_codes</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
@@ -1141,10 +1174,10 @@ the 3-digit NAICS split of manufacturing into durable/nondurable goods.</p>
 <div class="doc doc-object doc-function">
 
 
-<h3 id="bls_stats.industry.get_supersector_components" class="doc doc-heading">
+<h3 id="bls_stats.qcew.industry.get_supersector_components" class="doc doc-heading">
 <code class="doc-symbol doc-symbol-heading doc-symbol-function"></code>            <code class="highlight language-python"><span class="n">get_supersector_components</span><span class="p">()</span></code>
 
-<a href="#bls_stats.industry.get_supersector_components" class="headerlink" title="Permanent link">&para;</a></h3>
+<a href="#bls_stats.qcew.industry.get_supersector_components" class="headerlink" title="Permanent link">&para;</a></h3>
 
 
     <div class="doc doc-contents ">
@@ -1155,7 +1188,7 @@ the 3-digit NAICS split of manufacturing into durable/nondurable goods.</p>
 
 
             <details class="mkdocstrings-source">
-              <summary>Source code in <code>src/bls_stats/industry.py</code></summary>
+              <summary>Source code in <code>src/bls_stats/qcew/industry.py</code></summary>
               <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-82">82</a></span>
 <span class="normal"><a href="#__codelineno-0-83">83</a></span>
 <span class="normal"><a href="#__codelineno-0-84">84</a></span>
@@ -1186,10 +1219,10 @@ the 3-digit NAICS split of manufacturing into durable/nondurable goods.</p>
 <div class="doc doc-object doc-function">
 
 
-<h3 id="bls_stats.industry.get_domain_supersectors" class="doc doc-heading">
+<h3 id="bls_stats.qcew.industry.get_domain_supersectors" class="doc doc-heading">
 <code class="doc-symbol doc-symbol-heading doc-symbol-function"></code>            <code class="highlight language-python"><span class="n">get_domain_supersectors</span><span class="p">(</span><span class="n">domain_code</span><span class="p">)</span></code>
 
-<a href="#bls_stats.industry.get_domain_supersectors" class="headerlink" title="Permanent link">&para;</a></h3>
+<a href="#bls_stats.qcew.industry.get_domain_supersectors" class="headerlink" title="Permanent link">&para;</a></h3>
 
 
     <div class="doc doc-contents ">
@@ -1229,7 +1262,7 @@ the 3-digit NAICS split of manufacturing into durable/nondurable goods.</p>
 
 
             <details class="mkdocstrings-source">
-              <summary>Source code in <code>src/bls_stats/industry.py</code></summary>
+              <summary>Source code in <code>src/bls_stats/qcew/industry.py</code></summary>
               <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-107">107</a></span>
 <span class="normal"><a href="#__codelineno-0-108">108</a></span>
 <span class="normal"><a href="#__codelineno-0-109">109</a></span>
@@ -1273,90 +1306,6 @@ the 3-digit NAICS split of manufacturing into durable/nondurable goods.</p>
 <a id="__codelineno-0-126" name="__codelineno-0-126"></a>        <span class="k">return</span> <span class="n">services_private</span>
 <a id="__codelineno-0-127" name="__codelineno-0-127"></a>    <span class="k">else</span><span class="p">:</span>
 <a id="__codelineno-0-128" name="__codelineno-0-128"></a>        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Unknown domain code: </span><span class="si">{</span><span class="n">domain_code</span><span class="si">!r}</span><span class="s1">&#39;</span><span class="p">)</span>
-</code></pre></div></td></tr></table></div>
-            </details>
-    </div>
-
-</div>
-
-<div class="doc doc-object doc-function">
-
-
-<h3 id="bls_stats.industry.qcew_to_sector" class="doc doc-heading">
-<code class="doc-symbol doc-symbol-heading doc-symbol-function"></code>            <code class="highlight language-python"><span class="n">qcew_to_sector</span><span class="p">()</span></code>
-
-<a href="#bls_stats.industry.qcew_to_sector" class="headerlink" title="Permanent link">&para;</a></h3>
-
-
-    <div class="doc doc-contents ">
-
-        <p>Return a mapping from QCEW codes to NAICS-based sector codes.</p>
-<p>Maps both QCEW CSV API codes (<code>'1012'</code>, <code>'1023'</code>, ...) and raw
-NAICS codes (<code>'21'</code>, <code>'42'</code>, ...) to the NAICS-based sector codes
-used in :data:<code>_HIERARCHY_ROWS</code>.</p>
-
-
-            <details class="mkdocstrings-source">
-              <summary>Source code in <code>src/bls_stats/industry.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-264">264</a></span>
-<span class="normal"><a href="#__codelineno-0-265">265</a></span>
-<span class="normal"><a href="#__codelineno-0-266">266</a></span>
-<span class="normal"><a href="#__codelineno-0-267">267</a></span>
-<span class="normal"><a href="#__codelineno-0-268">268</a></span>
-<span class="normal"><a href="#__codelineno-0-269">269</a></span>
-<span class="normal"><a href="#__codelineno-0-270">270</a></span>
-<span class="normal"><a href="#__codelineno-0-271">271</a></span>
-<span class="normal"><a href="#__codelineno-0-272">272</a></span>
-<span class="normal"><a href="#__codelineno-0-273">273</a></span>
-<span class="normal"><a href="#__codelineno-0-274">274</a></span>
-<span class="normal"><a href="#__codelineno-0-275">275</a></span>
-<span class="normal"><a href="#__codelineno-0-276">276</a></span>
-<span class="normal"><a href="#__codelineno-0-277">277</a></span>
-<span class="normal"><a href="#__codelineno-0-278">278</a></span>
-<span class="normal"><a href="#__codelineno-0-279">279</a></span>
-<span class="normal"><a href="#__codelineno-0-280">280</a></span>
-<span class="normal"><a href="#__codelineno-0-281">281</a></span>
-<span class="normal"><a href="#__codelineno-0-282">282</a></span>
-<span class="normal"><a href="#__codelineno-0-283">283</a></span>
-<span class="normal"><a href="#__codelineno-0-284">284</a></span>
-<span class="normal"><a href="#__codelineno-0-285">285</a></span>
-<span class="normal"><a href="#__codelineno-0-286">286</a></span>
-<span class="normal"><a href="#__codelineno-0-287">287</a></span>
-<span class="normal"><a href="#__codelineno-0-288">288</a></span>
-<span class="normal"><a href="#__codelineno-0-289">289</a></span>
-<span class="normal"><a href="#__codelineno-0-290">290</a></span>
-<span class="normal"><a href="#__codelineno-0-291">291</a></span>
-<span class="normal"><a href="#__codelineno-0-292">292</a></span>
-<span class="normal"><a href="#__codelineno-0-293">293</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-264" name="__codelineno-0-264"></a><span class="k">def</span><span class="w"> </span><span class="nf">qcew_to_sector</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
-<a id="__codelineno-0-265" name="__codelineno-0-265"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Return a mapping from QCEW codes to NAICS-based sector codes.</span>
-<a id="__codelineno-0-266" name="__codelineno-0-266"></a>
-<a id="__codelineno-0-267" name="__codelineno-0-267"></a><span class="sd">    Maps both QCEW CSV API codes (``&#39;1012&#39;``, ``&#39;1023&#39;``, ...) and raw</span>
-<a id="__codelineno-0-268" name="__codelineno-0-268"></a><span class="sd">    NAICS codes (``&#39;21&#39;``, ``&#39;42&#39;``, ...) to the NAICS-based sector codes</span>
-<a id="__codelineno-0-269" name="__codelineno-0-269"></a><span class="sd">    used in :data:`_HIERARCHY_ROWS`.</span>
-<a id="__codelineno-0-270" name="__codelineno-0-270"></a><span class="sd">    &quot;&quot;&quot;</span>
-<a id="__codelineno-0-271" name="__codelineno-0-271"></a>    <span class="n">mapping</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
-<a id="__codelineno-0-272" name="__codelineno-0-272"></a>        <span class="s1">&#39;1012&#39;</span><span class="p">:</span> <span class="s1">&#39;21&#39;</span><span class="p">,</span>  <span class="c1"># Mining (NAICS 21)</span>
-<a id="__codelineno-0-273" name="__codelineno-0-273"></a>        <span class="s1">&#39;1013&#39;</span><span class="p">:</span> <span class="s1">&#39;22&#39;</span><span class="p">,</span>  <span class="c1"># Utilities (NAICS 22)</span>
-<a id="__codelineno-0-274" name="__codelineno-0-274"></a>        <span class="s1">&#39;1021&#39;</span><span class="p">:</span> <span class="s1">&#39;23&#39;</span><span class="p">,</span>  <span class="c1"># Construction (NAICS 23)</span>
-<a id="__codelineno-0-275" name="__codelineno-0-275"></a>        <span class="s1">&#39;1022&#39;</span><span class="p">:</span> <span class="s1">&#39;31&#39;</span><span class="p">,</span>  <span class="c1"># Manufacturing (NAICS 31-33, simplified to &#39;31&#39;)</span>
-<a id="__codelineno-0-276" name="__codelineno-0-276"></a>        <span class="s1">&#39;1023&#39;</span><span class="p">:</span> <span class="s1">&#39;42&#39;</span><span class="p">,</span>  <span class="c1"># Wholesale Trade (NAICS 42)</span>
-<a id="__codelineno-0-277" name="__codelineno-0-277"></a>        <span class="s1">&#39;1024&#39;</span><span class="p">:</span> <span class="s1">&#39;44&#39;</span><span class="p">,</span>  <span class="c1"># Retail Trade (NAICS 44-45, simplified to &#39;44&#39;)</span>
-<a id="__codelineno-0-278" name="__codelineno-0-278"></a>        <span class="s1">&#39;1025&#39;</span><span class="p">:</span> <span class="s1">&#39;48&#39;</span><span class="p">,</span>  <span class="c1"># Transportation (NAICS 48-49, simplified to &#39;48&#39;)</span>
-<a id="__codelineno-0-279" name="__codelineno-0-279"></a>        <span class="s1">&#39;1026&#39;</span><span class="p">:</span> <span class="s1">&#39;51&#39;</span><span class="p">,</span>  <span class="c1"># Information (NAICS 51)</span>
-<a id="__codelineno-0-280" name="__codelineno-0-280"></a>        <span class="s1">&#39;1027&#39;</span><span class="p">:</span> <span class="s1">&#39;52&#39;</span><span class="p">,</span>  <span class="c1"># Finance and Insurance (NAICS 52)</span>
-<a id="__codelineno-0-281" name="__codelineno-0-281"></a>        <span class="s1">&#39;1028&#39;</span><span class="p">:</span> <span class="s1">&#39;53&#39;</span><span class="p">,</span>  <span class="c1"># Real Estate (NAICS 53)</span>
-<a id="__codelineno-0-282" name="__codelineno-0-282"></a>        <span class="s1">&#39;1029&#39;</span><span class="p">:</span> <span class="s1">&#39;54&#39;</span><span class="p">,</span>  <span class="c1"># Professional Services (NAICS 54)</span>
-<a id="__codelineno-0-283" name="__codelineno-0-283"></a>        <span class="s1">&#39;102A&#39;</span><span class="p">:</span> <span class="s1">&#39;55&#39;</span><span class="p">,</span>  <span class="c1"># Management of Companies (NAICS 55)</span>
-<a id="__codelineno-0-284" name="__codelineno-0-284"></a>        <span class="s1">&#39;102B&#39;</span><span class="p">:</span> <span class="s1">&#39;56&#39;</span><span class="p">,</span>  <span class="c1"># Administrative Services (NAICS 56)</span>
-<a id="__codelineno-0-285" name="__codelineno-0-285"></a>        <span class="s1">&#39;102C&#39;</span><span class="p">:</span> <span class="s1">&#39;61&#39;</span><span class="p">,</span>  <span class="c1"># Educational Services (NAICS 61)</span>
-<a id="__codelineno-0-286" name="__codelineno-0-286"></a>        <span class="s1">&#39;102D&#39;</span><span class="p">:</span> <span class="s1">&#39;62&#39;</span><span class="p">,</span>  <span class="c1"># Health Care (NAICS 62)</span>
-<a id="__codelineno-0-287" name="__codelineno-0-287"></a>        <span class="s1">&#39;102E&#39;</span><span class="p">:</span> <span class="s1">&#39;71&#39;</span><span class="p">,</span>  <span class="c1"># Arts and Recreation (NAICS 71)</span>
-<a id="__codelineno-0-288" name="__codelineno-0-288"></a>        <span class="s1">&#39;102F&#39;</span><span class="p">:</span> <span class="s1">&#39;72&#39;</span><span class="p">,</span>  <span class="c1"># Accommodation and Food (NAICS 72)</span>
-<a id="__codelineno-0-289" name="__codelineno-0-289"></a>        <span class="s1">&#39;102G&#39;</span><span class="p">:</span> <span class="s1">&#39;81&#39;</span><span class="p">,</span>  <span class="c1"># Other Services (NAICS 81)</span>
-<a id="__codelineno-0-290" name="__codelineno-0-290"></a>    <span class="p">}</span>
-<a id="__codelineno-0-291" name="__codelineno-0-291"></a>    <span class="k">for</span> <span class="n">sector_code</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">_HIERARCHY_ROWS</span><span class="p">:</span>
-<a id="__codelineno-0-292" name="__codelineno-0-292"></a>        <span class="n">mapping</span><span class="p">[</span><span class="n">sector_code</span><span class="p">]</span> <span class="o">=</span> <span class="n">sector_code</span>
-<a id="__codelineno-0-293" name="__codelineno-0-293"></a>    <span class="k">return</span> <span class="n">mapping</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>

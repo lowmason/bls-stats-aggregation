@@ -1,6 +1,6 @@
-"""Tests for bls_stats.geography constants."""
+"""Tests for bls_stats_aggregation.geography constants."""
 
-from bls_stats.geography import (
+from bls_stats_aggregation.geography import (
     CENSUS_DIVISIONS,
     CENSUS_REGIONS,
     DIVISION_TO_REGION,

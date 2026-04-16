@@ -3,17 +3,16 @@
 from __future__ import annotations
 
 from pathlib import Path
-from unittest.mock import MagicMock, patch
 
 import polars as pl
 import pytest
 
-from bls_stats.jolts.industry import (
+from bls_stats_aggregation.jolts.industry import (
     JOLTS_DATA_ELEMENTS,
     JOLTS_TO_CES,
     _parse_series_columns,
 )
-from bls_stats.jolts.mapping import download_jolts, map_jolts_to_ces
+from bls_stats_aggregation.jolts.mapping import map_jolts_to_ces
 
 
 # ---------------------------------------------------------------------------
@@ -32,15 +31,6 @@ def _build_series_id(
 ) -> str:
     """Build a 21-character JOLTS series ID from components."""
     return f"JT{seasonal}{industry}{state}{area}{sizeclass}{dataelement}{ratelevel}"
-
-
-def _make_tsv(rows: list[dict]) -> bytes:
-    """Build a tab-separated byte string from row dicts."""
-    cols = ["series_id", "year", "period", "value", "footnote_codes"]
-    lines = ["\t".join(cols)]
-    for row in rows:
-        lines.append("\t".join(str(row.get(c, "")) for c in cols))
-    return "\n".join(lines).encode()
 
 
 def _make_jolts_parquet(
@@ -158,194 +148,6 @@ class TestParseSeriesColumns:
 
 
 # ---------------------------------------------------------------------------
-# Download
-# ---------------------------------------------------------------------------
-
-
-class TestDownloadJolts:
-    def _valid_row(self, **overrides):
-        defaults = {
-            "series_id": _build_series_id(),
-            "year": "2024",
-            "period": "M01",
-            "value": "100.0",
-            "footnote_codes": "",
-        }
-        defaults.update(overrides)
-        return defaults
-
-    @patch("bls_stats.jolts.mapping.get_with_retry")
-    @patch("bls_stats.jolts.mapping.create_client")
-    def test_download_creates_parquet(self, mock_create, mock_get, tmp_path):
-        tsv = _make_tsv([self._valid_row()])
-        mock_response = MagicMock()
-        mock_response.content = tsv
-        mock_get.return_value = mock_response
-        mock_create.return_value = MagicMock()
-
-        out = tmp_path / "jolts.parquet"
-        result = download_jolts(out)
-
-        assert result == out
-        assert out.exists()
-        df = pl.read_parquet(out)
-        assert df.height == 1
-        assert "state_code" in df.columns
-
-    @patch("bls_stats.jolts.mapping.get_with_retry")
-    @patch("bls_stats.jolts.mapping.create_client")
-    def test_download_includes_state_data(self, mock_create, mock_get, tmp_path):
-        rows = [
-            self._valid_row(),
-            self._valid_row(series_id=_build_series_id(state="06")),
-        ]
-        mock_response = MagicMock()
-        mock_response.content = _make_tsv(rows)
-        mock_get.return_value = mock_response
-        mock_create.return_value = MagicMock()
-
-        out = tmp_path / "jolts.parquet"
-        download_jolts(out)
-        df = pl.read_parquet(out)
-        assert df.height == 2
-        assert set(df["state_code"].to_list()) == {"00", "06"}
-
-    @patch("bls_stats.jolts.mapping.get_with_retry")
-    @patch("bls_stats.jolts.mapping.create_client")
-    def test_download_filters_nonseasonal(self, mock_create, mock_get, tmp_path):
-        rows = [
-            self._valid_row(series_id=_build_series_id(seasonal="U")),
-            self._valid_row(series_id=_build_series_id(seasonal="S")),
-        ]
-        mock_response = MagicMock()
-        mock_response.content = _make_tsv(rows)
-        mock_get.return_value = mock_response
-        mock_create.return_value = MagicMock()
-
-        out = tmp_path / "jolts.parquet"
-        download_jolts(out)
-        df = pl.read_parquet(out)
-        assert df.height == 1
-
-    @patch("bls_stats.jolts.mapping.get_with_retry")
-    @patch("bls_stats.jolts.mapping.create_client")
-    def test_download_filters_m13(self, mock_create, mock_get, tmp_path):
-        rows = [
-            self._valid_row(period="M13"),
-            self._valid_row(period="M06"),
-        ]
-        mock_response = MagicMock()
-        mock_response.content = _make_tsv(rows)
-        mock_get.return_value = mock_response
-        mock_create.return_value = MagicMock()
-
-        out = tmp_path / "jolts.parquet"
-        download_jolts(out)
-        df = pl.read_parquet(out)
-        assert df.height == 1
-
-    @patch("bls_stats.jolts.mapping.get_with_retry")
-    @patch("bls_stats.jolts.mapping.create_client")
-    def test_download_filters_unknown_industry(self, mock_create, mock_get, tmp_path):
-        rows = [
-            self._valid_row(series_id=_build_series_id(industry="999999")),
-            self._valid_row(),
-        ]
-        mock_response = MagicMock()
-        mock_response.content = _make_tsv(rows)
-        mock_get.return_value = mock_response
-        mock_create.return_value = MagicMock()
-
-        out = tmp_path / "jolts.parquet"
-        download_jolts(out)
-        df = pl.read_parquet(out)
-        assert df.height == 1
-
-    @patch("bls_stats.jolts.mapping.get_with_retry")
-    @patch("bls_stats.jolts.mapping.create_client")
-    def test_download_filters_nonzero_sizeclass(self, mock_create, mock_get, tmp_path):
-        rows = [
-            self._valid_row(series_id=_build_series_id(sizeclass="01")),
-            self._valid_row(),
-        ]
-        mock_response = MagicMock()
-        mock_response.content = _make_tsv(rows)
-        mock_get.return_value = mock_response
-        mock_create.return_value = MagicMock()
-
-        out = tmp_path / "jolts.parquet"
-        download_jolts(out)
-        df = pl.read_parquet(out)
-        assert df.height == 1
-
-    @patch("bls_stats.jolts.mapping.get_with_retry")
-    @patch("bls_stats.jolts.mapping.create_client")
-    def test_download_filters_unwanted_dataelement(
-        self, mock_create, mock_get, tmp_path
-    ):
-        rows = [
-            self._valid_row(series_id=_build_series_id(dataelement="JO")),
-            self._valid_row(series_id=_build_series_id(dataelement="HI")),
-        ]
-        mock_response = MagicMock()
-        mock_response.content = _make_tsv(rows)
-        mock_get.return_value = mock_response
-        mock_create.return_value = MagicMock()
-
-        out = tmp_path / "jolts.parquet"
-        download_jolts(out)
-        df = pl.read_parquet(out)
-        assert df.height == 1
-
-    @patch("bls_stats.jolts.mapping.get_with_retry")
-    def test_download_uses_provided_client(self, mock_get, tmp_path):
-        mock_response = MagicMock()
-        mock_response.content = _make_tsv([self._valid_row()])
-        mock_get.return_value = mock_response
-
-        client = MagicMock()
-        out = tmp_path / "jolts.parquet"
-        download_jolts(out, client=client)
-
-        mock_get.assert_called_once()
-        assert mock_get.call_args[0][0] is client
-
-    @patch("bls_stats.jolts.mapping.get_with_retry")
-    @patch("bls_stats.jolts.mapping.create_client")
-    def test_download_strips_whitespace(self, mock_create, mock_get, tmp_path):
-        """BLS flat files have trailing whitespace on series_id."""
-        row = self._valid_row()
-        row["series_id"] = row["series_id"] + "   "
-        row["value"] = " 100.0 "
-        mock_response = MagicMock()
-        mock_response.content = _make_tsv([row])
-        mock_get.return_value = mock_response
-        mock_create.return_value = MagicMock()
-
-        out = tmp_path / "jolts.parquet"
-        download_jolts(out)
-        df = pl.read_parquet(out)
-        assert df.height == 1
-        assert df["value"][0] == pytest.approx(100.0)
-
-    @patch("bls_stats.jolts.mapping.get_with_retry")
-    @patch("bls_stats.jolts.mapping.create_client")
-    def test_download_builds_ref_date(self, mock_create, mock_get, tmp_path):
-        row = self._valid_row(year="2024", period="M03")
-        mock_response = MagicMock()
-        mock_response.content = _make_tsv([row])
-        mock_get.return_value = mock_response
-        mock_create.return_value = MagicMock()
-
-        out = tmp_path / "jolts.parquet"
-        download_jolts(out)
-        df = pl.read_parquet(out)
-        from datetime import date
-
-        assert df["ref_date"][0] == date(2024, 3, 1)
-
-
-# ---------------------------------------------------------------------------
 # Mapping
 # ---------------------------------------------------------------------------
 
@@ -376,8 +178,8 @@ class TestMapJoltsToCes:
         assert result.height >= 1
         row = result.filter(
             (pl.col("industry_code") == "05")
-            & (pl.col("rate_or_level") == "level")
-            & (pl.col("data_element") == "hires")
+            & (pl.col("rate_level") == "level")
+            & (pl.col("data_element") == "entries")
         )
         assert row.height == 1
         assert row["industry_type"][0] == "domain"
@@ -404,7 +206,7 @@ class TestMapJoltsToCes:
             "geographic_code",
             "industry_type",
             "industry_code",
-            "rate_or_level",
+            "rate_level",
             "data_element",
             "ref_date",
             "value",
@@ -434,8 +236,8 @@ class TestMapJoltsToCes:
             ],
         )
         result = map_jolts_to_ces(path)
-        levels = result.filter(pl.col("rate_or_level") == "level")
-        rates = result.filter(pl.col("rate_or_level") == "rate")
+        levels = result.filter(pl.col("rate_level") == "level")
+        rates = result.filter(pl.col("rate_level") == "rate")
         assert levels.height >= 1
         assert rates.height >= 1
 
@@ -463,8 +265,8 @@ class TestMapJoltsToCes:
         )
         result = map_jolts_to_ces(path)
         elements = result["data_element"].unique().to_list()
-        assert "hires" in elements
-        assert "total_separations" in elements
+        assert "entries" in elements
+        assert "exits" in elements
 
     def _make_full_domain_fixture(self, tmp_path):
         """Create parquet with levels and rates for domain derivation tests.
@@ -558,8 +360,8 @@ class TestMapJoltsToCes:
         result = map_jolts_to_ces(path)
         d06 = result.filter(
             (pl.col("industry_code") == "06")
-            & (pl.col("data_element") == "hires")
-            & (pl.col("rate_or_level") == "level")
+            & (pl.col("data_element") == "entries")
+            & (pl.col("rate_level") == "level")
         )
         assert d06.height == 1
         assert d06["value"][0] == pytest.approx(600.0)
@@ -579,8 +381,8 @@ class TestMapJoltsToCes:
         result = map_jolts_to_ces(path)
         d06_rate = result.filter(
             (pl.col("industry_code") == "06")
-            & (pl.col("data_element") == "hires")
-            & (pl.col("rate_or_level") == "rate")
+            & (pl.col("data_element") == "entries")
+            & (pl.col("rate_level") == "rate")
         )
         assert d06_rate.height == 1
         assert d06_rate["value"][0] == pytest.approx(3.0)
@@ -591,8 +393,8 @@ class TestMapJoltsToCes:
         result = map_jolts_to_ces(path)
         d08 = result.filter(
             (pl.col("industry_code") == "08")
-            & (pl.col("data_element") == "hires")
-            & (pl.col("rate_or_level") == "level")
+            & (pl.col("data_element") == "entries")
+            & (pl.col("rate_level") == "level")
         )
         assert d08.height == 1
         # 1000 - 600 = 400
@@ -612,8 +414,8 @@ class TestMapJoltsToCes:
         result = map_jolts_to_ces(path)
         d08_rate = result.filter(
             (pl.col("industry_code") == "08")
-            & (pl.col("data_element") == "hires")
-            & (pl.col("rate_or_level") == "rate")
+            & (pl.col("data_element") == "entries")
+            & (pl.col("rate_level") == "rate")
         )
         assert d08_rate.height == 1
         assert d08_rate["value"][0] == pytest.approx(2.0)
@@ -624,9 +426,9 @@ class TestMapJoltsToCes:
         result = map_jolts_to_ces(path)
         for code in ["06", "08"]:
             domain = result.filter(pl.col("industry_code") == code)
-            rate_or_levels = set(domain["rate_or_level"].to_list())
-            assert rate_or_levels == {"level", "rate"}, (
-                f"Domain {code} missing rate_or_level values"
+            rate_levels = set(domain["rate_level"].to_list())
+            assert rate_levels == {"level", "rate"}, (
+                f"Domain {code} missing rate_level values"
             )
 
     def test_state_geography_mapping(self, tmp_path):

@@ -1,6 +1,6 @@
-"""CES industry hierarchy and QCEW-to-CES crosswalk.
+"""CES industry hierarchy and cross-program industry standard.
 
-Maps QCEW NAICS codes to the BLS CES industry structure:
+Defines the BLS CES industry structure that all program subpackages map to:
   sector (2-digit NAICS) → supersector → domain
 
 Provides ownership-to-sector mapping for government employment and
@@ -129,7 +129,7 @@ def get_domain_supersectors(domain_code: str) -> list[str]:
 
 
 # ---------------------------------------------------------------------------
-# CES-to-QCEW industry cross-mapping
+# CES industry codes and cross-mappings
 # ---------------------------------------------------------------------------
 
 _CES_DOMAIN = [

@@ -1,11 +1,11 @@
-"""Tests for bls_stats.qcew.mapping — bulk QCEW-to-CES mapping."""
+"""Tests for bls_stats_aggregation.qcew.mapping — bulk QCEW-to-CES mapping."""
 
 from __future__ import annotations
 
 import polars as pl
 import pytest
 
-from bls_stats.qcew.mapping import map_bulk_to_ces
+from bls_stats_aggregation.qcew.mapping import map_bulk_to_ces
 
 
 class TestMapBulkToCes:

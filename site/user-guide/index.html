@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Download QCEW data from BLS and map to CES industry groups">
+        <meta name="description" content="Download BLS data (QCEW, JOLTS) and map to CES industry groups">
       
       
       
@@ -25,7 +25,7 @@
     
     
       
-        <title>User guide - bls-stats</title>
+        <title>User guide - bls-stats-aggregation</title>
       
     
     
@@ -92,7 +92,7 @@
 
 <header class="md-header" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href=".." title="bls-stats" class="md-header__button md-logo" aria-label="bls-stats" data-md-component="logo">
+    <a href=".." title="bls-stats-aggregation" class="md-header__button md-logo" aria-label="bls-stats-aggregation" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -106,7 +106,7 @@
       <div class="md-header__ellipsis">
         <div class="md-header__topic">
           <span class="md-ellipsis">
-            bls-stats
+            bls-stats-aggregation
           </span>
         </div>
         <div class="md-header__topic" data-md-component="header-topic">
@@ -190,6 +190,18 @@
 </div>
       
     
+    
+      <div class="md-header__source">
+        <a href="https://github.com/lowmason/bls-stats-aggregation" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
     
   </nav>
   
@@ -287,14 +299,26 @@
 
 <nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href=".." title="bls-stats" class="md-nav__button md-logo" aria-label="bls-stats" data-md-component="logo">
+    <a href=".." title="bls-stats-aggregation" class="md-nav__button md-logo" aria-label="bls-stats-aggregation" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
 
     </a>
-    bls-stats
+    bls-stats-aggregation
   </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/lowmason/bls-stats-aggregation" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
   
   <ul class="md-nav__list" data-md-scrollfix>
     
@@ -403,41 +427,35 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#two-pipelines" class="md-nav__link">
+  <a href="#qcew-pipeline" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Two pipelines
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Two pipelines">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#csv-api-pipeline-2014" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        CSV API pipeline (2014+)
+        QCEW pipeline
       
     </span>
   </a>
   
 </li>
-        
-          <li class="md-nav__item">
-  <a href="#bulk-pipeline-2003" class="md-nav__link">
+      
+        <li class="md-nav__item">
+  <a href="#jolts-pipeline" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Bulk pipeline (2003+)
+        JOLTS pipeline
       
     </span>
   </a>
   
 </li>
-        
-      </ul>
-    </nav>
+      
+        <li class="md-nav__item">
+  <a href="#geography" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Geography
+      
+    </span>
+  </a>
   
 </li>
       
@@ -477,17 +495,6 @@
         
       </ul>
     </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#caching" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Caching
-      
-    </span>
-  </a>
   
 </li>
       
@@ -672,6 +679,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../api/jolts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    bls_stats.jolts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../api/industry/" class="md-nav__link">
         
   
@@ -679,7 +714,7 @@
   <span class="md-ellipsis">
     
   
-    bls_stats.industry
+    bls_stats.qcew.industry
   
 
     
@@ -707,7 +742,7 @@
   <span class="md-ellipsis">
     
   
-    bls_stats.mapping
+    bls_stats.qcew.mapping
   
 
     
@@ -766,41 +801,35 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#two-pipelines" class="md-nav__link">
+  <a href="#qcew-pipeline" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Two pipelines
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Two pipelines">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#csv-api-pipeline-2014" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        CSV API pipeline (2014+)
+        QCEW pipeline
       
     </span>
   </a>
   
 </li>
-        
-          <li class="md-nav__item">
-  <a href="#bulk-pipeline-2003" class="md-nav__link">
+      
+        <li class="md-nav__item">
+  <a href="#jolts-pipeline" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Bulk pipeline (2003+)
+        JOLTS pipeline
       
     </span>
   </a>
   
 </li>
-        
-      </ul>
-    </nav>
+      
+        <li class="md-nav__item">
+  <a href="#geography" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Geography
+      
+    </span>
+  </a>
   
 </li>
       
@@ -843,17 +872,6 @@
   
 </li>
       
-        <li class="md-nav__item">
-  <a href="#caching" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Caching
-      
-    </span>
-  </a>
-  
-</li>
-      
     </ul>
   
 </nav>
@@ -870,39 +888,52 @@
                   
 
 
+  
+  
+
 
 <h1 id="user-guide">User guide<a class="headerlink" href="#user-guide" title="Permanent link">&para;</a></h1>
 <h2 id="install">Install<a class="headerlink" href="#install" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.
 </code></pre></div>
 <p>Requires Python 3.11+ with <code>polars</code> and <code>httpx</code>.</p>
-<h2 id="two-pipelines">Two pipelines<a class="headerlink" href="#two-pipelines" title="Permanent link">&para;</a></h2>
-<h3 id="csv-api-pipeline-2014">CSV API pipeline (2014+)<a class="headerlink" href="#csv-api-pipeline-2014" title="Permanent link">&para;</a></h3>
-<p>Downloads per-quarter, per-industry CSVs from the BLS QCEW CSV API at <code>data.bls.gov/cew/data/api/</code>. Good for recent data, supports filtering by geography and ownership.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">bls_stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">fetch_qcew_with_geography</span><span class="p">,</span> <span class="n">map_qcew_to_ces</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="c1"># Download 2023-2024, private + government, national + all states</span>
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="n">raw</span> <span class="o">=</span> <span class="n">fetch_qcew_with_geography</span><span class="p">(</span>
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>    <span class="n">years</span><span class="o">=</span><span class="p">[</span><span class="mi">2023</span><span class="p">,</span> <span class="mi">2024</span><span class="p">],</span>
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>    <span class="n">ownership_codes</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;5&#39;</span><span class="p">,</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;2&#39;</span><span class="p">,</span> <span class="s1">&#39;3&#39;</span><span class="p">],</span>
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>    <span class="n">include_national</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>    <span class="n">include_states</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="p">)</span>
-<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>
-<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="c1"># Map to CES industry groups (sectors → supersectors → domains)</span>
-<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="n">ces</span> <span class="o">=</span> <span class="n">map_qcew_to_ces</span><span class="p">(</span><span class="n">raw</span><span class="p">,</span> <span class="n">include_government</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="nb">print</span><span class="p">(</span><span class="n">ces</span><span class="p">)</span>
+<h2 id="qcew-pipeline">QCEW pipeline<a class="headerlink" href="#qcew-pipeline" title="Permanent link">&para;</a></h2>
+<p>Downloads yearly ~280 MB singlefile ZIPs from <code>data.bls.gov/cew/data/files/</code> (available from 2003 onward), filters to national + state rows, and saves a compact parquet. Then maps to the full CES industry hierarchy including 3-digit manufacturing split into durable/nondurable.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">bls_stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">download_qcew_bulk</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">bls_stats.qcew</span><span class="w"> </span><span class="kn">import</span> <span class="n">map_bulk_to_ces</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="c1"># Download and filter (writes parquet)</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="n">path</span> <span class="o">=</span> <span class="n">download_qcew_bulk</span><span class="p">(</span><span class="n">start_year</span><span class="o">=</span><span class="mi">2020</span><span class="p">,</span> <span class="n">end_year</span><span class="o">=</span><span class="mi">2024</span><span class="p">)</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="c1"># Map to CES industry groups</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="n">ces</span> <span class="o">=</span> <span class="n">map_bulk_to_ces</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="nb">print</span><span class="p">(</span><span class="n">ces</span><span class="p">)</span>
 </code></pre></div>
-<h3 id="bulk-pipeline-2003">Bulk pipeline (2003+)<a class="headerlink" href="#bulk-pipeline-2003" title="Permanent link">&para;</a></h3>
-<p>Downloads yearly ~280 MB singlefile ZIPs from <code>data.bls.gov/cew/data/files/</code>, filters to national + state rows, and saves a compact parquet. Includes 3-digit manufacturing split into durable/nondurable.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">bls_stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">download_qcew_bulk</span><span class="p">,</span> <span class="n">map_bulk_to_ces</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="c1"># Download and filter (writes parquet)</span>
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="n">path</span> <span class="o">=</span> <span class="n">download_qcew_bulk</span><span class="p">(</span><span class="n">start_year</span><span class="o">=</span><span class="mi">2020</span><span class="p">,</span> <span class="n">end_year</span><span class="o">=</span><span class="mi">2024</span><span class="p">)</span>
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="c1"># Map to CES industry groups</span>
-<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="n">ces</span> <span class="o">=</span> <span class="n">map_bulk_to_ces</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
-<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="nb">print</span><span class="p">(</span><span class="n">ces</span><span class="p">)</span>
+<p>Output columns: <code>industry_type</code>, <code>industry_code</code>, <code>geographic_type</code>, <code>geographic_code</code>, <code>ref_date</code>, <code>employment</code>.</p>
+<p>Set <code>BLS_API_KEY</code> in your environment for higher BLS rate limits.</p>
+<h2 id="jolts-pipeline">JOLTS pipeline<a class="headerlink" href="#jolts-pipeline" title="Permanent link">&para;</a></h2>
+<p>Downloads the <code>jt.data.1.AllItems</code> tab-separated flat file (~33 MB) from <code>download.bls.gov</code>, filters to seasonally adjusted national estimates for private industries, and maps to the CES hierarchy at the domain and supersector levels.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">bls_stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">download_jolts</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">bls_stats.jolts</span><span class="w"> </span><span class="kn">import</span> <span class="n">map_jolts_to_ces</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="c1"># Download and filter (writes parquet)</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="n">path</span> <span class="o">=</span> <span class="n">download_jolts</span><span class="p">()</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="c1"># Map to CES industry groups</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="n">jolts</span> <span class="o">=</span> <span class="n">map_jolts_to_ces</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="nb">print</span><span class="p">(</span><span class="n">jolts</span><span class="p">)</span>
+</code></pre></div>
+<p>Output columns: <code>industry_type</code>, <code>industry_code</code>, <code>rate_or_level</code>, <code>data_element</code>, <code>ref_date</code>, <code>value</code>.</p>
+<p>JOLTS data includes two data elements: <strong>hires</strong> and <strong>total separations</strong>, each reported as both a level (thousands) and a rate (percent). The mapping covers Total Private (domain <code>05</code>) and 10 supersectors. Domains <code>06</code> (Goods-Producing) and <code>08</code> (Private Service-Providing) are derived by aggregating supersector estimates, with rates computed as employment-weighted averages.</p>
+<h2 id="geography">Geography<a class="headerlink" href="#geography" title="Permanent link">&para;</a></h2>
+<p>The <code>bls_stats.geography</code> module provides state FIPS codes and Census region/division mappings used by the QCEW pipeline to aggregate state-level data.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">bls_stats</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>    <span class="n">CENSUS_REGIONS</span><span class="p">,</span>           <span class="c1"># {&#39;Northeast&#39;: [&#39;09&#39;, &#39;23&#39;, ...], ...}</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>    <span class="n">CENSUS_DIVISIONS</span><span class="p">,</span>         <span class="c1"># {&#39;New England&#39;: [&#39;09&#39;, &#39;23&#39;, ...], ...}</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>    <span class="n">DIVISION_TO_REGION</span><span class="p">,</span>       <span class="c1"># {&#39;New England&#39;: &#39;Northeast&#39;, ...}</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>    <span class="n">STATE_FIPS_TO_DIVISION</span><span class="p">,</span>   <span class="c1"># {&#39;09&#39;: &#39;New England&#39;, ...}</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>    <span class="n">STATE_FIPS_TO_REGION</span><span class="p">,</span>     <span class="c1"># {&#39;09&#39;: &#39;Northeast&#39;, ...}</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="p">)</span>
 </code></pre></div>
 <h2 id="industry-hierarchy">Industry hierarchy<a class="headerlink" href="#industry-hierarchy" title="Permanent link">&para;</a></h2>
 <p>The CES industry structure has three levels:</p>
@@ -954,23 +985,26 @@
 </table>
 <h3 id="mapping-from-qcew">Mapping from QCEW<a class="headerlink" href="#mapping-from-qcew" title="Permanent link">&para;</a></h3>
 <ul>
-<li><strong>By industry</strong>: QCEW API codes (e.g. <code>1012</code> → NAICS 21 → CES sector <code>21</code>) and raw NAICS codes are mapped to CES 2-digit sector codes, then aggregated up through supersectors to domains.</li>
+<li><strong>By industry</strong>: NAICS 2-digit codes from the bulk singlefiles are mapped to CES sector codes, then aggregated up through supersectors to domains.</li>
 <li><strong>By ownership</strong>: Government employment uses <code>own_code</code> 1/2/3 (Federal/State/Local) on total industry rows, mapped to CES sectors 91/92/93.</li>
 <li><strong>By state</strong>: Area FIPS codes are mapped to <code>geographic_type</code> (national/state) and <code>geographic_code</code> (2-digit state FIPS).</li>
 <li><strong>Manufacturing split</strong>: 3-digit NAICS subsectors are split into durable goods (CES 31) and nondurable goods (CES 32) via <code>NAICS3_TO_MFG_SECTOR</code>.</li>
 </ul>
 <h3 id="key-constants">Key constants<a class="headerlink" href="#key-constants" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">bls_stats</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>    <span class="n">INDUSTRY_HIERARCHY</span><span class="p">,</span>       <span class="c1"># Polars LazyFrame: sector → supersector → domain</span>
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>    <span class="n">INDUSTRY_MAP</span><span class="p">,</span>             <span class="c1"># List[IndustryEntry]: all 35 CES industry codes</span>
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>    <span class="n">GOVT_OWNERSHIP_TO_SECTOR</span><span class="p">,</span> <span class="c1"># {&#39;1&#39;: &#39;91&#39;, &#39;2&#39;: &#39;92&#39;, &#39;3&#39;: &#39;93&#39;}</span>
-<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>    <span class="n">NAICS3_TO_MFG_SECTOR</span><span class="p">,</span>     <span class="c1"># {&#39;311&#39;: &#39;32&#39;, &#39;321&#39;: &#39;31&#39;, ...}</span>
-<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>    <span class="n">CES_SECTOR_TO_NAICS</span><span class="p">,</span>      <span class="c1"># {&#39;41&#39;: &#39;42&#39;, &#39;42&#39;: &#39;44&#39;, &#39;43&#39;: &#39;48&#39;, ...}</span>
-<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>    <span class="n">qcew_to_sector</span><span class="p">,</span>           <span class="c1"># Returns dict: QCEW API code → NAICS sector</span>
-<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">bls_stats.qcew</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>    <span class="n">INDUSTRY_HIERARCHY</span><span class="p">,</span>           <span class="c1"># Polars LazyFrame: sector → supersector → domain</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>    <span class="n">INDUSTRY_MAP</span><span class="p">,</span>                 <span class="c1"># List[IndustryEntry]: all CES industry codes</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>    <span class="n">DOMAIN_DEFINITIONS</span><span class="p">,</span>           <span class="c1"># Domain code → name, includes_govt, goods_only</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>    <span class="n">GOVT_OWNERSHIP_TO_SECTOR</span><span class="p">,</span>     <span class="c1"># {&#39;1&#39;: &#39;91&#39;, &#39;2&#39;: &#39;92&#39;, &#39;3&#39;: &#39;93&#39;}</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>    <span class="n">NAICS3_TO_MFG_SECTOR</span><span class="p">,</span>         <span class="c1"># {&#39;311&#39;: &#39;32&#39;, &#39;321&#39;: &#39;31&#39;, ...}</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>    <span class="n">CES_SECTOR_TO_NAICS</span><span class="p">,</span>          <span class="c1"># {&#39;41&#39;: &#39;42&#39;, &#39;42&#39;: &#39;44&#39;, &#39;43&#39;: &#39;48&#39;, ...}</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>    <span class="n">SINGLE_SECTOR_SUPERSECTORS</span><span class="p">,</span>   <span class="c1"># {&#39;20&#39;: &#39;23&#39;, &#39;50&#39;: &#39;51&#39;, &#39;80&#39;: &#39;81&#39;}</span>
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>    <span class="n">get_sector_codes</span><span class="p">,</span>             <span class="c1"># → sorted list of 2-digit sector codes</span>
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a>    <span class="n">get_supersector_codes</span><span class="p">,</span>        <span class="c1"># → sorted list of supersector codes</span>
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a>    <span class="n">get_supersector_components</span><span class="p">,</span>   <span class="c1"># → dict: supersector → list of sector codes</span>
+<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a>    <span class="n">get_domain_supersectors</span><span class="p">,</span>      <span class="c1"># → list of supersectors composing a domain</span>
+<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="p">)</span>
 </code></pre></div>
-<h2 id="caching">Caching<a class="headerlink" href="#caching" title="Permanent link">&para;</a></h2>
-<p>The CSV API client caches responses locally (default <code>.cache/bls/</code>, 24-hour TTL). Set <code>BLS_API_KEY</code> in your environment for higher rate limits on the JSON API.</p>
 
 
 

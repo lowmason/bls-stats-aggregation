@@ -1,6 +1,6 @@
-# bls-stats
+# bls-stats-aggregation
 
-[![Coverage](https://codecov.io/gh/lowmason/bls-stats/graph/badge.svg)](https://codecov.io/gh/lowmason/bls-stats)
+[![Coverage](https://codecov.io/gh/lowmason/bls-stats-aggregation/graph/badge.svg)](https://codecov.io/gh/lowmason/bls-stats-aggregation)
 
 Download QCEW (Quarterly Census of Employment and Wages) data from BLS and map it to CES (Current Employment Statistics) industry groups.
 

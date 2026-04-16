@@ -1,6 +1,6 @@
-site_name: bls-stats
+site_name: bls-stats-aggregation
 site_description: Download BLS data (QCEW, JOLTS) and map to CES industry groups
-repo_url: https://github.com/lowmason/bls-stats
+repo_url: https://github.com/lowmason/bls-stats-aggregation
 
 theme:
   name: material

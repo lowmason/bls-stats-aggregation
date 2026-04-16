@@ -1,6 +1,6 @@
 """JOLTS-to-CES industry mapping subpackage.
 
-Maps JOLTS (Job Openings and Labor Turnover Survey) flat-file data to the
+Maps JOLTS (Job Openings and Labor Turnover Survey) data to the
 CES (Current Employment Statistics) industry hierarchy at the domain and
 supersector levels for national and state geographies.
 """
@@ -12,13 +12,11 @@ from .industry import (
     JOLTS_TO_CES,
 )
 from .mapping import (
-    download_jolts,
     map_jolts_to_ces,
 )
 
 __all__ = [
     "JOLTS_DATA_ELEMENTS",
     "JOLTS_TO_CES",
-    "download_jolts",
     "map_jolts_to_ces",
 ]

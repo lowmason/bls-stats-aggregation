@@ -3,14 +3,17 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "bls-stats"
-version = "0.1.0"
-description = "Download QCEW data from BLS and map to CES industry groups"
+name = "bls-stats-aggregation"
+version = "0.2.0"
+description = "Map BLS program data to CES industry groups"
 requires-python = ">=3.11"
 dependencies = [
     "polars>=1.0",
-    "httpx[http2]>=0.27",
+    "typer>=0.12",
 ]
+
+[project.scripts]
+bls-stats = "bls_stats_aggregation.cli:app"
 
 [project.optional-dependencies]
 dev = [
@@ -22,6 +25,9 @@ docs = [
     "mkdocs-material>=9.5",
     "mkdocstrings[python]>=0.26",
 ]
+trino = [
+    "trino>=0.328",
+]
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/bls_stats"]
+packages = ["src/bls_stats_aggregation"]

@@ -21,7 +21,7 @@ from ..geography import (
     DIVISION_TO_REGION,
     STATE_FIPS_TO_DIVISION,
 )
-from .industry import (
+from ..ces.industry import (
     GOVT_OWNERSHIP_TO_SECTOR,
     NAICS3_TO_MFG_SECTOR,
     get_domain_supersectors,

@@ -1,4 +1,4 @@
-# bls-stats
+# bls-stats-aggregation
 
 Download and process Bureau of Labor Statistics data, mapping it to the CES (Current Employment Statistics) industry hierarchy.
 

@@ -1,136 +1,21 @@
-"""Download JOLTS flat file and map to CES industry groups.
+"""Map JOLTS data to CES industry groups.
 
-Downloads the ``jt.data.1.AllItems`` tab-separated file from
-``download.bls.gov/pub/time.series/jt/`` and maps series to the CES
+Maps JOLTS (Job Openings and Labor Turnover Survey) data to the CES
 industry hierarchy at the domain and supersector levels for national
 and state geographies.
 """
 
 from __future__ import annotations
 
-import io
 from pathlib import Path
 
-import httpx
 import polars as pl
 
-from ..geography import STATES
-from ..http_client import create_client, get_with_retry
 from .industry import (
     JOLTS_DATA_ELEMENTS,
     JOLTS_TO_CES,
     _GOODS_SUPERSECTORS,
-    _parse_series_columns,
 )
-
-_JOLTS_URL = "https://download.bls.gov/pub/time.series/jt/jt.data.1.AllItems"
-
-_VALID_STATE_CODES: frozenset[str] = frozenset(STATES) | {"00"}
-
-
-# ---------------------------------------------------------------------------
-# Download
-# ---------------------------------------------------------------------------
-
-
-def download_jolts(
-    output_path: Path | str = "data/jolts.parquet",
-    *,
-    client: httpx.Client | None = None,
-) -> Path:
-    """Download JOLTS flat file and save filtered data as parquet.
-
-    Downloads the ``jt.data.1.AllItems`` tab-separated file (~33 MB),
-    filters to seasonally adjusted national and state estimates, and
-    writes the result as a compact parquet file.
-
-    Args:
-        output_path: Path to write the output parquet file.
-        client: Optional pre-built ``httpx.Client``.
-
-    Returns:
-        Path to the output parquet file.
-    """
-    output_path = Path(output_path)
-    output_path.parent.mkdir(parents=True, exist_ok=True)
-
-    own_client = client is None
-    if client is None:
-        client = create_client()
-
-    try:
-        print("  downloading JOLTS flat file ...", flush=True)
-        r = get_with_retry(client, _JOLTS_URL, timeout=120.0)
-        r.raise_for_status()
-    finally:
-        if own_client:
-            client.close()
-
-    df = pl.read_csv(
-        io.BytesIO(r.content),
-        separator="\t",
-        infer_schema_length=0,
-        n_threads=1,
-    )
-
-    # BLS flat files often have whitespace in column names
-    df = df.rename({c: c.strip() for c in df.columns})
-
-    # Strip whitespace from key columns (BLS flat files have trailing spaces)
-    df = df.with_columns(
-        pl.col("series_id").str.strip_chars(),
-        pl.col("value").str.strip_chars(),
-        pl.col("year").str.strip_chars(),
-        pl.col("period").str.strip_chars(),
-    )
-
-    # Filter to well-formed series IDs
-    df = df.filter(pl.col("series_id").str.len_chars() == 21)
-
-    # Parse series ID components
-    df = _parse_series_columns(df)
-
-    # Build sets for filtering
-    industry_codes = set(JOLTS_TO_CES.keys())
-    dataelement_codes = set(JOLTS_DATA_ELEMENTS.keys())
-
-    # Apply all filters (national + state, statewide area only)
-    df = df.filter(
-        (pl.col("seasonal") == "U")
-        & pl.col("state_code").is_in(_VALID_STATE_CODES)
-        & (pl.col("area_code") == "00000")
-        & (pl.col("sizeclass_code") == "00")
-        & pl.col("industry_code").is_in(industry_codes)
-        & pl.col("dataelement_code").is_in(dataelement_codes)
-        & pl.col("period").str.slice(1).cast(pl.Int32).is_between(1, 12)
-    )
-
-    # Build ref_date and cast value
-    df = df.with_columns(
-        ref_date=pl.date(
-            pl.col("year").cast(pl.Int32),
-            pl.col("period").str.slice(1).cast(pl.Int32),
-            1,
-        ),
-        value=pl.col("value").cast(pl.Float64),
-    )
-
-    # Select columns for parquet output
-    df = df.select(
-        "state_code",
-        "industry_code",
-        "dataelement_code",
-        "ratelevel_code",
-        "ref_date",
-        "value",
-    )
-
-    df.write_parquet(output_path)
-    print(
-        f"  wrote {output_path} ({df.height:,} rows)",
-        flush=True,
-    )
-    return output_path
 
 
 # ---------------------------------------------------------------------------
@@ -143,13 +28,12 @@ def map_jolts_to_ces(
 ) -> pl.DataFrame:
     """Map JOLTS parquet data to CES industry groups.
 
-    Reads the filtered parquet from :func:`download_jolts`, maps JOLTS
-    industry codes to CES codes, and derives goods-producing (``06``)
-    and private service-providing (``08``) domains from national
-    supersector estimates.
+    Reads the filtered parquet, maps JOLTS industry codes to CES codes,
+    and derives goods-producing (``06``) and private service-providing
+    (``08``) domains from national supersector estimates.
 
     Args:
-        jolts_path: Path to the parquet file from ``download_jolts``.
+        jolts_path: Path to the JOLTS parquet file.
 
     Returns:
         Long-format DataFrame with columns ``geographic_type``,
@@ -348,8 +232,8 @@ def map_jolts_to_ces(
             domain_08_rates,
         ])
         .sort(
-            'geographic_type', 'geographic_code', 
-            'industry_type', 'industry_code', 
+            'geographic_type', 'geographic_code',
+            'industry_type', 'industry_code',
             'ref_date'
         )
         .rename({'rate_or_level': 'rate_level'})

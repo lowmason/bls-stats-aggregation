@@ -1,8 +1,8 @@
-"""Tests for bls_stats.qcew.industry hierarchy and mappings."""
+"""Tests for bls_stats_aggregation.qcew.industry hierarchy and mappings."""
 
 import pytest
 
-from bls_stats.qcew.industry import (
+from bls_stats_aggregation.qcew.industry import (
     CES_SECTOR_TO_NAICS,
     DOMAIN_DEFINITIONS,
     GOVT_OWNERSHIP_TO_SECTOR,
